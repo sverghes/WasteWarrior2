@@ -84,7 +84,7 @@ const Splash = (props) => {
 				<div className={styles.title}>Manage medical waste better with Artificial Intelligence</div>
 				<div className={styles.subtitle}>Take a picture of medical waste and learn proper classification and disposal protocols for Theatre and Pathology departments.</div>
 				<div className={styles.button} onClick={() => setGetStarted(true)}>Get started</div>
-				<a className={styles.about} href="https://github.com/alyssaxuu/ecosnap" target="_blank">About</a>
+				<a className={styles.about} href="https://github.com/sverghes/wastewarrior" target="_blank">About</a>
 			</div>
 			}
 		</div>

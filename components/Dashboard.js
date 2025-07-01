@@ -72,11 +72,6 @@ const Dashboard = (props) => {
             onClick={() => props.setSettings(true)}
             className={styles.settings}
           />
-          <img
-            onClick={() => handleShare()}
-            className={styles.help}
-            src="share.svg"
-          />
         </div>
       </div>
       {props.num > 0 ? (
