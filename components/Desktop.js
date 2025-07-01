@@ -43,14 +43,14 @@ const Desktop = (props) => {
         </div>
       </div>
       <a
-        href="https://twitter.com/intent/tweet?text=Check%20out%20WasteWarrior%20Healthcare%20to%20manage%20medical%20waste%20better%20with%20AI&url=http%3A%2F%2Fecosnap.vercel.app"
+        href="https://wa.me/?text=Check%20out%20WasteWarrior%20Healthcare%20to%20manage%20medical%20waste%20better%20with%20AI%20https://wastewarrior-healthcare.vercel.app"
         className={styles.share}
         target="_blank"
       >
-        <img src="twitter.svg" /> Share
+        <img src="whatsapp.svg" /> Share
       </a>
       <a
-        href="https://github.com/alyssaxuu/ecosnap"
+        href="https://github.com/sverghes/wastewarrior"
         target="_blank"
         className={styles.github}
       >

@@ -20,13 +20,13 @@ const Dashboard = (props) => {
         })
         .catch(function (error) {
           window.open(
-            "https://twitter.com/intent/tweet?text=Check%20out%20WasteWarrior%20Healthcare%20to%20manage%20medical%20waste%20better%20with%20AI&url=http%3A%2F%2Fecosnap.vercel.app",
+            "https://wa.me/?text=Check%20out%20WasteWarrior%20Healthcare%20to%20manage%20medical%20waste%20better%20with%20AI%20https://wastewarrior-healthcare.vercel.app",
             "_blank"
           );
         });
     } else {
       window.open(
-        "https://twitter.com/intent/tweet?text=Check%20out%20WasteWarrior%20Healthcare%20to%20manage%20medical%20waste%20better%20with%20AI&url=http%3A%2F%2Fecosnap.vercel.app",
+        "https://wa.me/?text=Check%20out%20WasteWarrior%20Healthcare%20to%20manage%20medical%20waste%20better%20with%20AI%20https://wastewarrior-healthcare.vercel.app",
         "_blank"
       );
     }
