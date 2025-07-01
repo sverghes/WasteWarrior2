@@ -7,31 +7,6 @@ const Dashboard = (props) => {
   const [streak, setStreak] = useState(0);
   const [badges, setBadges] = useState([]);
 
-  const handleShare = () => {
-    if (navigator.share) {
-      navigator
-        .share({
-          url: "https://ecosnap.vercel.app",
-          text: "Learn how to manage medical waste with WasteWarrior Healthcare",
-          title: "WasteWarrior Healthcare",
-        })
-        .then(function () {
-          console.log("Successful share");
-        })
-        .catch(function (error) {
-          window.open(
-            "https://wa.me/?text=Check%20out%20WasteWarrior%20Healthcare%20to%20manage%20medical%20waste%20better%20with%20AI%20https://wastewarrior-healthcare.vercel.app",
-            "_blank"
-          );
-        });
-    } else {
-      window.open(
-        "https://wa.me/?text=Check%20out%20WasteWarrior%20Healthcare%20to%20manage%20medical%20waste%20better%20with%20AI%20https://wastewarrior-healthcare.vercel.app",
-        "_blank"
-      );
-    }
-  };
-
   useEffect(() => {
     if (typeof window !== "undefined") {
       // Load gamification data
