@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./../styles/Desktop.module.css";
 import Splash from "./Splash";
 
+// Last updated: 2025-07-02 - Vercel deployment check
 const Desktop = (props) => {
   return (
     <div className={styles.desktop}>
