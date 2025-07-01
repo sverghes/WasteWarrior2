@@ -1,0 +1,177 @@
+.dashboard {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+}
+
+/* Navigation */
+.nav {
+	width: 100%;
+	margin-top: 20px;
+}
+.header {
+	font-size: 20px;
+	margin-left: 20px;
+}
+.right {
+	float: right;
+	margin-right: 20px;
+	margin-top: -22px;
+}
+.settings {
+	margin-right: 15px;
+}
+.settings, .help {
+	vertical-align: middle;
+}
+.settings:hover, .help:hover {
+	cursor: pointer;
+}
+/* Callout */
+.callout {
+	width: calc(100% - 40px);
+	border-radius: 10px;
+	color: #FFF;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 20px;
+	background: #61AF2B;
+	overflow: hidden;
+	height: 138px;
+	position: relative;
+}
+.callout:hover{
+	cursor: pointer;
+}
+.callout img {
+	height: 100%;
+	position: absolute;
+	right: 0px;
+	top: 0px
+}
+.pretitle {
+	font-size: 18px;
+	margin-left: 20px;
+	margin-top: 40px;
+	font-family: "DM Sans";
+	font-weight: 500;
+	opacity: .6;
+}
+.title {
+	font-size: 24px;
+	margin-left: 20px;
+	margin-top: 10px;
+}
+
+/* Button */
+.button {
+	box-shadow: 0px 4px 16px rgba(154, 207, 117, 0.25);
+	position: fixed;
+	max-width: 560px;
+	bottom: 15px;
+	left: 0px;
+	right: 0px;
+	margin: auto;
+	height: 50px;
+	line-height: 50px;
+	background: #74AD42;
+	text-align: center;
+	border-radius: 10px;
+	font-size: 14px;
+	color: #FFF;
+	width: calc(100% - 40px);
+}
+.button:hover {
+	cursor: pointer;
+}
+.button img {
+	margin-right: 8px;
+	margin-top: -5px;
+	width: 20px;
+	vertical-align: middle;
+}
+
+/* Gamification Stats */
+.gamificationStats {
+	display: flex;
+	justify-content: space-around;
+	padding: 20px;
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	margin: 0 20px;
+	border-radius: 12px;
+	margin-bottom: 20px;
+}
+
+.statCard {
+	text-align: center;
+	color: white;
+}
+
+.statValue {
+	font-size: 28px;
+	font-weight: 700;
+	font-family: "DM Sans";
+	margin-bottom: 5px;
+}
+
+.statLabel {
+	font-size: 14px;
+	font-family: "DM Sans";
+	opacity: 0.9;
+}
+
+/* Challenge Section */
+.challengeSection {
+	margin: 20px;
+	background: #f8f9ff;
+	border-radius: 12px;
+	padding: 20px;
+	border: 2px solid #e8ecff;
+}
+
+.challengeHeader {
+	display: flex;
+	align-items: center;
+	margin-bottom: 15px;
+	font-size: 18px;
+	font-weight: 600;
+	font-family: "DM Sans";
+	color: #4c51bf;
+}
+
+.challengeHeader img {
+	width: 24px;
+	height: 24px;
+	margin-right: 10px;
+}
+
+.challengeCard {
+	background: white;
+	padding: 15px;
+	border-radius: 8px;
+	border-left: 4px solid #4c51bf;
+}
+
+.challengeTitle {
+	font-size: 16px;
+	font-weight: 500;
+	font-family: "DM Sans";
+	color: #2d3748;
+	margin-bottom: 8px;
+}
+
+.challengeReward {
+	font-size: 14px;
+	font-family: "DM Sans";
+	color: #38a169;
+	margin-bottom: 5px;
+}
+
+.challengeProgress {
+	font-size: 14px;
+	font-family: "DM Sans";
+	color: #718096;
+}
