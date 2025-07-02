@@ -12,8 +12,8 @@ const Settings = (props) => {
 				<div className={styles.item} onClick={() => props.setReset(true)}><span>Update department</span> <img src="enter.svg"/></div>
 				<div className={styles.item} onClick={() => props.setOn(true)}><span>View onboarding</span> <img src="enter.svg"/></div>
 				<div className={styles.space}></div>
-				<a href="https://github.com/sverghes/wastewarrior" target="_blank" className={styles.item}><span>About this app</span> <img src="enter.svg"/></a>
-				<a href="https://github.com/sverghes/wastewarrior" target="_blank" className={styles.item}><span>Acknowledgements</span> <img src="enter.svg"/></a>
+				<a href="https://github.com/sverghes/WasteWarrior2" target="_blank" className={styles.item}><span>About this app</span> <img src="enter.svg"/></a>
+				<a href="https://github.com/sverghes/WasteWarrior2" target="_blank" className={styles.item}><span>Acknowledgements</span> <img src="enter.svg"/></a>
 				<div className={styles.space}></div>
 				<a href="https://ctmuhb.nhs.wales/hospitals/recycling/" target="_blank" className={styles.item}><span>CTMUHB Recycling</span> <img src="enter.svg"/></a>
 				<div className={styles.space}></div>
