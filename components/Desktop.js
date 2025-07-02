@@ -19,14 +19,6 @@ const Desktop = (props) => {
           setRegion={props.setRegion}
         />
       )}
-      <a
-        href="https://alyssax.substack.com/p/we-built-an-ai-recycling-app-in-a"
-        target="_blank"
-        className={styles.awards}
-      >
-        <img className={styles.award1} src="./award1.svg" />
-        <img className={styles.award2} src="./award2.svg" />
-      </a>
       <div className={styles.badge}>
         <img src="logo-with-back.svg" />
         <div className={styles.badgewrap}>
@@ -35,10 +27,6 @@ const Desktop = (props) => {
             Adapted from Eco-snap
           </div>
         </div>
-      </div>
-      <div className={styles.qrcode}>
-        <img src="qrcode.png" />
-        <span>Open on your phone ✨</span>
       </div>
     </div>
   );
