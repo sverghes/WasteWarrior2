@@ -17,17 +17,17 @@ const Splash = (props) => {
 	const [on, setOn] = useState(false);
 
 	useEffect(() => {
-		if (props.region > 0) {
+		// Only set done to true if user has clicked "Get started" AND region is set
+		if (props.region > 0 && getStarted) {
 			setDone(true);
-			setGetStarted(true);
 		}
-	}, [props.region]);
+	}, [props.region, getStarted]);
 
 	useEffect(() => {
-		if (props.onboarding) {
+		if (props.onboarding && getStarted) {
 			setDone2(true);
 		}
-	}, [props.onboarding]);
+	}, [props.onboarding, getStarted]);
 
 	useEffect(() => {
 		if (done2) {
@@ -41,6 +41,11 @@ const Splash = (props) => {
 		localStorage.setItem("region", number);
 		setDone(true);
 		setReset(false);
+		
+		// If user has previously completed onboarding, skip it
+		if (props.onboarding) {
+			setDone2(true);
+		}
 	}
 
 	return (
@@ -64,7 +69,7 @@ const Splash = (props) => {
 			{reset &&
 				<RegionSelect handleRegion={handleRegion} region={props.region} />
 			}
-			{getStarted && !done2 && !done &&
+			{getStarted && !done &&
 				<RegionSelect handleRegion={handleRegion} region={props.region} />
 			}
 			{!getStarted &&
