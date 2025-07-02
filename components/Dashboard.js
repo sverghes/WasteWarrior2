@@ -49,7 +49,7 @@ const Dashboard = (props) => {
           />
         </div>
       </div>
-      {props.num > 0 ? (
+      {props.num > 0 && (
         <div className={styles.callout} onClick={() => props.setView(true)}>
           <img src="decoration.svg" />
           <div className={styles.pretitle}>You classified</div>
@@ -57,13 +57,6 @@ const Dashboard = (props) => {
             {props.num} medical waste item{props.num > 1 && "s"}
           </div>
           <div className={styles.subtitle}>Keep up the great work! 🏥</div>
-        </div>
-      ) : (
-        <div className={styles.callout} onClick={() => props.setView(true)}>
-          <img src="decoration.svg" />
-          <div className={styles.pretitle}>Start learning</div>
-          <div className={styles.title}>Scan medical waste</div>
-          <div className={styles.subtitle}>Earn points and improve safety! 🎯</div>
         </div>
       )}
       
