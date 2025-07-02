@@ -22,6 +22,10 @@ const Dashboard = (props) => {
     }
   }, []);
 
+  const handlePointsUpdate = (newPoints) => {
+    setPoints(newPoints);
+  };
+
   return (
     <div className={styles.dashboard}>
       {/* Gamification Stats */}
@@ -72,7 +76,7 @@ const Dashboard = (props) => {
           <div className={styles.challengeProgress}>Progress: 0/5</div>
         </div>
       </div>
-      <HowTo />
+      <HowTo onPointsUpdate={handlePointsUpdate} />
       <div className={styles.button} onClick={() => props.setView(true)}>
         <img src="scanmore.svg" />
         Scan medical waste

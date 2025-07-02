@@ -3,6 +3,8 @@ import styles from "./../styles/HowTo.module.css";
 
 const HowTo = (props) => {
   const [searchField, setSearchField] = useState("");
+  const [coinAnimations, setCoinAnimations] = useState([]);
+  const [clickedItems, setClickedItems] = useState(new Set());
   const items = [
     {
       name: "Red Bag - Infectious Waste",
@@ -113,6 +115,49 @@ const HowTo = (props) => {
     setSearchField(e.target.value);
   };
 
+  const handleItemClick = (e, item, index) => {
+    e.preventDefault();
+    
+    // Don't add points if already clicked
+    if (clickedItems.has(index)) {
+      return;
+    }
+
+    // Add to clicked items
+    setClickedItems(prev => new Set([...prev, index]));
+    
+    // Get click position
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = rect.left + rect.width / 2;
+    const y = rect.top + rect.height / 2;
+    
+    // Create coin animation
+    const coinId = Date.now() + Math.random();
+    const newCoin = {
+      id: coinId,
+      x: x,
+      y: y,
+      points: item.points
+    };
+    
+    setCoinAnimations(prev => [...prev, newCoin]);
+    
+    // Update points in localStorage
+    const currentPoints = parseInt(localStorage.getItem("points") || "0");
+    const newPoints = currentPoints + item.points;
+    localStorage.setItem("points", newPoints.toString());
+    
+    // Remove coin animation after animation completes
+    setTimeout(() => {
+      setCoinAnimations(prev => prev.filter(coin => coin.id !== coinId));
+    }, 2000);
+
+    // Trigger page refresh to update dashboard points
+    if (props.onPointsUpdate) {
+      props.onPointsUpdate(newPoints);
+    }
+  };
+
   return (
     <div className={styles.howto}>
       <div className={styles.title}>Medical Waste Disposal Guide</div>
@@ -134,11 +179,10 @@ const HowTo = (props) => {
       <div className={styles.results}>
         {filteredItems.length > 0 ? (
           filteredItems.map((item, i) => (
-            <a
-              href={item.url}
-              target="_blank"
-              className={styles.result}
+            <div
+              className={`${styles.result} ${clickedItems.has(i) ? styles.clicked : ''}`}
               key={i}
+              onClick={(e) => handleItemClick(e, item, i)}
             >
               <div
                 className={styles.image}
@@ -148,10 +192,12 @@ const HowTo = (props) => {
                 <div className={styles.name}>{item.name}</div>
                 <div className={styles.desc}>{item.description}</div>
                 {item.points && (
-                  <div className={styles.points}>+{item.points} points</div>
+                  <div className={`${styles.points} ${clickedItems.has(i) ? styles.pointsEarned : ''}`}>
+                    {clickedItems.has(i) ? '✓ Earned' : `+${item.points} points`}
+                  </div>
                 )}
               </div>
-            </a>
+            </div>
           ))
         ) : (
           <a
@@ -166,6 +212,22 @@ const HowTo = (props) => {
           </a>
         )}
       </div>
+      
+      {/* Coin Animations */}
+      {coinAnimations.map(coin => (
+        <div
+          key={coin.id}
+          className={styles.coinAnimation}
+          style={{
+            left: coin.x - 25,
+            top: coin.y - 25,
+          }}
+        >
+          <div className={styles.coin}>
+            <span>+{coin.points}</span>
+          </div>
+        </div>
+      ))}
     </div>
   );
 };
