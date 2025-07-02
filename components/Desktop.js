@@ -32,14 +32,7 @@ const Desktop = (props) => {
         <div className={styles.badgewrap}>
           <div className={styles.name}>WasteWarrior</div>
           <div className={styles.credit}>
-            Made by{" "}
-            <a href="https://www.linkedin.com/in/leonorfurtado" target="_blank">
-              Leo
-            </a>{" "}
-            &{" "}
-            <a href="https://twitter.com/alyssaxuu/" target="_blank">
-              Alyssa X
-            </a>
+            Adapted from Eco-snap
           </div>
         </div>
       </div>

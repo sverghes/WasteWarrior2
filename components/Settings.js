@@ -15,11 +15,10 @@ const Settings = (props) => {
 				<a href="https://github.com/sverghes/wastewarrior" target="_blank" className={styles.item}><span>About this app</span> <img src="enter.svg"/></a>
 				<a href="https://github.com/sverghes/wastewarrior" target="_blank" className={styles.item}><span>Acknowledgements</span> <img src="enter.svg"/></a>
 				<div className={styles.space}></div>
-				<a href="https://londonrecycles.co.uk" target="_blank" className={styles.item}><span>London Recycles</span> <img src="enter.svg"/></a>
-				<a href="https://recyclenow.com" target="_blank" className={styles.item}><span>Recycle Now</span> <img src="enter.svg"/></a>
+				<a href="https://ctmuhb.nhs.wales/hospitals/recycling/" target="_blank" className={styles.item}><span>CTMUHB Recycling</span> <img src="enter.svg"/></a>
 				<div className={styles.space}></div>
 				<a href="mailto:hi@alyssax.com" target="_blank" className={styles.item}><span>Contact us</span> <img src="enter.svg"/></a>
-				<div className={styles.credit}>Made by <a href="https://www.linkedin.com/in/leonorfurtado" target="_blank">Leo</a> & <a href="https://twitter.com/alyssaxuu" target="_blank">Alyssa X</a></div>
+				<div className={styles.credit}>Adapted from Eco-snap</div>
 			</div>
 		</div>
 	)
