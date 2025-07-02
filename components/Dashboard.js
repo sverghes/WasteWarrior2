@@ -6,6 +6,8 @@ const Dashboard = (props) => {
   const [points, setPoints] = useState(0);
   const [streak, setStreak] = useState(0);
   const [badges, setBadges] = useState([]);
+  const [dailyProgress, setDailyProgress] = useState(0);
+  const [isOnCooldown, setIsOnCooldown] = useState(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -19,11 +21,41 @@ const Dashboard = (props) => {
       if (localStorage.getItem("badges") != null) {
         setBadges(JSON.parse(localStorage.getItem("badges")));
       }
+      
+      // Load daily progress
+      const savedClickCount = parseInt(localStorage.getItem("dailyClickCount") || "0");
+      const savedCooldownEnd = localStorage.getItem("cooldownEndTime");
+      
+      setDailyProgress(savedClickCount);
+      
+      if (savedCooldownEnd) {
+        const endTime = parseInt(savedCooldownEnd);
+        const now = Date.now();
+        setIsOnCooldown(now < endTime);
+      }
     }
   }, []);
 
   const handlePointsUpdate = (newPoints) => {
     setPoints(newPoints);
+    
+    // Update daily progress and cooldown status
+    const savedClickCount = parseInt(localStorage.getItem("dailyClickCount") || "0");
+    const savedCooldownEnd = localStorage.getItem("cooldownEndTime");
+    
+    setDailyProgress(savedClickCount);
+    
+    if (savedCooldownEnd) {
+      const endTime = parseInt(savedCooldownEnd);
+      const now = Date.now();
+      setIsOnCooldown(now < endTime);
+    }
+    
+    // Update streak if it changed
+    const currentStreak = parseInt(localStorage.getItem("streak") || "0");
+    if (currentStreak !== streak) {
+      setStreak(currentStreak);
+    }
   };
 
   return (
@@ -71,9 +103,13 @@ const Dashboard = (props) => {
           <span>Daily Challenge</span>
         </div>
         <div className={styles.challengeCard}>
-          <div className={styles.challengeTitle}>Identify 5 sharps containers correctly</div>
-          <div className={styles.challengeReward}>Reward: 50 bonus points 🎯</div>
-          <div className={styles.challengeProgress}>Progress: 0/5</div>
+          <div className={styles.challengeTitle}>Click 3 disposal guide items</div>
+          <div className={styles.challengeReward}>
+            {isOnCooldown ? "🎉 Streak earned! Wait for next round" : "Reward: +1 Streak 🔥"}
+          </div>
+          <div className={styles.challengeProgress}>
+            Progress: {dailyProgress}/3 {isOnCooldown && "- Cooldown active"}
+          </div>
         </div>
       </div>
       <HowTo onPointsUpdate={handlePointsUpdate} />

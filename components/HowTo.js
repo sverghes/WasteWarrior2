@@ -5,6 +5,12 @@ const HowTo = (props) => {
   const [searchField, setSearchField] = useState("");
   const [coinAnimations, setCoinAnimations] = useState([]);
   const [clickedItems, setClickedItems] = useState(new Set());
+  const [dailyClickCount, setDailyClickCount] = useState(0);
+  const [isOnCooldown, setIsOnCooldown] = useState(false);
+  const [cooldownEndTime, setCooldownEndTime] = useState(null);
+  const [showStreakMessage, setShowStreakMessage] = useState(false);
+  const [confettiPieces, setConfettiPieces] = useState([]);
+  const [timeRemaining, setTimeRemaining] = useState(0);
   const items = [
     {
       name: "Red Bag - Infectious Waste",
@@ -104,6 +110,93 @@ const HowTo = (props) => {
     }
   ];
 
+  useEffect(() => {
+    // Initialize state from localStorage
+    const savedClickCount = parseInt(localStorage.getItem("dailyClickCount") || "0");
+    const savedCooldownEnd = localStorage.getItem("cooldownEndTime");
+    const savedClickedItems = localStorage.getItem("dailyClickedItems");
+    
+    setDailyClickCount(savedClickCount);
+    
+    if (savedClickedItems) {
+      try {
+        const parsedItems = JSON.parse(savedClickedItems);
+        setClickedItems(new Set(parsedItems));
+      } catch (e) {
+        console.error("Error parsing clicked items:", e);
+      }
+    }
+    
+    if (savedCooldownEnd) {
+      const endTime = parseInt(savedCooldownEnd);
+      const now = Date.now();
+      
+      if (now < endTime) {
+        setIsOnCooldown(true);
+        setCooldownEndTime(endTime);
+        setTimeRemaining(Math.ceil((endTime - now) / 1000));
+      } else {
+        // Cooldown expired, reset daily progress
+        localStorage.removeItem("cooldownEndTime");
+        localStorage.removeItem("dailyClickCount");
+        localStorage.removeItem("dailyClickedItems");
+        setDailyClickCount(0);
+        setClickedItems(new Set());
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    let interval;
+    if (isOnCooldown && cooldownEndTime) {
+      interval = setInterval(() => {
+        const now = Date.now();
+        const remaining = Math.ceil((cooldownEndTime - now) / 1000);
+        
+        if (remaining <= 0) {
+          // Cooldown finished
+          setIsOnCooldown(false);
+          setCooldownEndTime(null);
+          setTimeRemaining(0);
+          setDailyClickCount(0);
+          setClickedItems(new Set());
+          
+          // Clear localStorage
+          localStorage.removeItem("cooldownEndTime");
+          localStorage.removeItem("dailyClickCount");
+          localStorage.removeItem("dailyClickedItems");
+        } else {
+          setTimeRemaining(remaining);
+        }
+      }, 1000);
+    }
+    
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [isOnCooldown, cooldownEndTime]);
+
+  const createConfetti = () => {
+    const pieces = [];
+    const colors = ['#FFD700', '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#98D8C8'];
+    
+    for (let i = 0; i < 50; i++) {
+      pieces.push({
+        id: Math.random(),
+        left: Math.random() * 100,
+        backgroundColor: colors[Math.floor(Math.random() * colors.length)],
+        animationDelay: Math.random() * 3,
+        animationDuration: 2 + Math.random() * 2
+      });
+    }
+    
+    setConfettiPieces(pieces);
+    
+    setTimeout(() => {
+      setConfettiPieces([]);
+    }, 5000);
+  };
+
   const filteredItems = items.filter((item) => {
     return (
       item.name.toLowerCase().includes(searchField.toLowerCase()) ||
@@ -118,13 +211,27 @@ const HowTo = (props) => {
   const handleItemClick = (e, item, index) => {
     e.preventDefault();
     
-    // Don't add points if already clicked
+    // Don't allow clicks during cooldown
+    if (isOnCooldown) {
+      return;
+    }
+    
+    // Don't add points if already clicked in this session
     if (clickedItems.has(index)) {
       return;
     }
 
     // Add to clicked items
-    setClickedItems(prev => new Set([...prev, index]));
+    const newClickedItems = new Set([...clickedItems, index]);
+    setClickedItems(newClickedItems);
+    
+    // Increment daily click count
+    const newDailyCount = dailyClickCount + 1;
+    setDailyClickCount(newDailyCount);
+    
+    // Save to localStorage
+    localStorage.setItem("dailyClickCount", newDailyCount.toString());
+    localStorage.setItem("dailyClickedItems", JSON.stringify([...newClickedItems]));
     
     // Get click position
     const rect = e.currentTarget.getBoundingClientRect();
@@ -152,10 +259,56 @@ const HowTo = (props) => {
       setCoinAnimations(prev => prev.filter(coin => coin.id !== coinId));
     }, 2000);
 
-    // Trigger page refresh to update dashboard points
-    if (props.onPointsUpdate) {
-      props.onPointsUpdate(newPoints);
+    // Check if we've reached 3 clicks (streak achieved)
+    if (newDailyCount === 3) {
+      // Increment streak
+      const currentStreak = parseInt(localStorage.getItem("streak") || "0");
+      const newStreak = currentStreak + 1;
+      localStorage.setItem("streak", newStreak.toString());
+      
+      // Show confetti and streak message
+      createConfetti();
+      setShowStreakMessage(true);
+      
+      setTimeout(() => {
+        setShowStreakMessage(false);
+      }, 3000);
+      
+      // Start 5-minute cooldown
+      const cooldownEnd = Date.now() + (5 * 60 * 1000); // 5 minutes
+      setCooldownEndTime(cooldownEnd);
+      setIsOnCooldown(true);
+      setTimeRemaining(300); // 5 minutes in seconds
+      localStorage.setItem("cooldownEndTime", cooldownEnd.toString());
+      
+      // Trigger dashboard update
+      if (props.onPointsUpdate) {
+        props.onPointsUpdate(newPoints);
+      }
+    } else {
+      // Trigger page refresh to update dashboard points
+      if (props.onPointsUpdate) {
+        props.onPointsUpdate(newPoints);
+      }
     }
+    
+    // Check if all items are clicked (badge increment)
+    if (newClickedItems.size === items.length) {
+      const currentBadges = JSON.parse(localStorage.getItem("badges") || "[]");
+      const newBadges = [...currentBadges, {
+        id: Date.now(),
+        name: "Guide Master",
+        description: "Completed all disposal guide items",
+        earned: new Date().toISOString()
+      }];
+      localStorage.setItem("badges", JSON.stringify(newBadges));
+    }
+  };
+
+  const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
   };
 
   return (
@@ -183,6 +336,7 @@ const HowTo = (props) => {
               className={`${styles.result} ${clickedItems.has(i) ? styles.clicked : ''}`}
               key={i}
               onClick={(e) => handleItemClick(e, item, i)}
+              style={{ position: 'relative' }}
             >
               <div
                 className={styles.image}
@@ -197,6 +351,13 @@ const HowTo = (props) => {
                   </div>
                 )}
               </div>
+              {isOnCooldown && !clickedItems.has(i) && (
+                <div className={styles.cooldownOverlay}>
+                  <div className={styles.cooldownMessage}>
+                    Cooldown: {formatTime(timeRemaining)}
+                  </div>
+                </div>
+              )}
             </div>
           ))
         ) : (
@@ -228,6 +389,32 @@ const HowTo = (props) => {
           </div>
         </div>
       ))}
+      
+      {/* Confetti */}
+      {confettiPieces.length > 0 && (
+        <div className={styles.confettiContainer}>
+          {confettiPieces.map(piece => (
+            <div
+              key={piece.id}
+              className={styles.confettiPiece}
+              style={{
+                left: `${piece.left}%`,
+                backgroundColor: piece.backgroundColor,
+                animationDelay: `${piece.animationDelay}s`,
+                animationDuration: `${piece.animationDuration}s`
+              }}
+            />
+          ))}
+        </div>
+      )}
+      
+      {/* Streak Achievement Message */}
+      {showStreakMessage && (
+        <div className={styles.streakMessage}>
+          <h3>🎉 Streak Achieved! 🎉</h3>
+          <p>Wait 5 minutes until you can earn points again</p>
+        </div>
+      )}
     </div>
   );
 };
