@@ -1,6 +1,6 @@
 # WasteWarrior Healthcare
 
-<!-- Deploy to wastewarrior3.vercel.app: 2025-07-23 -->
+<!-- Force fresh deployment: 2025-07-23-v3 -->
 
 
 https://user-images.githubusercontent.com/7581348/208559445-a449cef6-0ae1-4c08-b9a5-c591062c3a3e.mp4
