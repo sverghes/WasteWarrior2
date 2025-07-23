@@ -1,5 +1,5 @@
 .leaderboard {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #61AF2B 0%, #74AD42 100%);
   border-radius: 20px;
   padding: 20px;
   margin: 20px 0;
@@ -52,15 +52,15 @@
 
 .rank1 {
   transform: scale(1.1);
-  background: rgba(255, 215, 0, 0.2);
+  background: rgba(56, 161, 105, 0.3);
 }
 
 .rank2 {
-  background: rgba(192, 192, 192, 0.2);
+  background: rgba(116, 173, 66, 0.2);
 }
 
 .rank3 {
-  background: rgba(205, 127, 50, 0.2);
+  background: rgba(97, 175, 43, 0.15);
 }
 
 .podiumRank {
@@ -78,7 +78,7 @@
 .podiumPoints {
   font-size: 14px;
   font-weight: bold;
-  color: #FFD700;
+  color: #FFFFFF;
 }
 
 .podiumBadges {
@@ -119,8 +119,8 @@
 }
 
 .currentUser {
-  background: rgba(255, 215, 0, 0.2);
-  border: 1px solid rgba(255, 215, 0, 0.4);
+  background: rgba(56, 161, 105, 0.3);
+  border: 1px solid rgba(56, 161, 105, 0.6);
   font-weight: bold;
 }
 
@@ -149,16 +149,16 @@
 }
 
 .points {
-  color: #FFD700;
+  color: #FFFFFF;
   font-weight: bold;
 }
 
 .streak {
-  color: #FF6B6B;
+  color: #E8F5E8;
 }
 
 .badges {
-  color: #4ECDC4;
+  color: #C6F6D5;
 }
 
 .empty {
