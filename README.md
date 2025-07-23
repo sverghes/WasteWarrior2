@@ -1,6 +1,6 @@
 # WasteWarrior Healthcare
 
-<!-- Force deployment refresh: 2025-07-23 -->
+<!-- Complete Vercel redeploy: 2025-07-23-final -->
 
 
 https://user-images.githubusercontent.com/7581348/208559445-a449cef6-0ae1-4c08-b9a5-c591062c3a3e.mp4
@@ -12,7 +12,7 @@ WasteWarrior Healthcare helps Theatre and Pathology departments classify and dis
 
 👉 [Try it now - it's free with no sign in needed](https://wastewarrior2.vercel.app)
 
-<!-- Deployment trigger: 2025-07-23 -->
+<!-- Final deployment with Leaderboard: 2025-07-23 -->
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/alyssaxuu/ecosnap)
 
