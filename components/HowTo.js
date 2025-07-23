@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./../styles/HowTo.module.css";
+import { db } from "../firebase/firebaseConfig";
+import { doc, setDoc } from "firebase/firestore";
 
 const HowTo = (props) => {
   const [searchField, setSearchField] = useState("");
@@ -109,6 +111,43 @@ const HowTo = (props) => {
       points: 20
     }
   ];
+
+  // Function to sync user data to Firebase leaderboard
+  const syncToFirebase = async (points, streak, badges) => {
+    try {
+      if (!db) {
+        console.log("Firebase not configured - using local storage only");
+        return;
+      }
+
+      // Generate or get user ID
+      let userId = localStorage.getItem("userId");
+      if (!userId) {
+        userId = "user_" + Math.random().toString(36).substr(2, 9);
+        localStorage.setItem("userId", userId);
+      }
+
+      // Get department
+      const department = localStorage.getItem("department") || "Theatre";
+      
+      const userRef = doc(db, "leaderboard", userId);
+      const anonymousName = `${department} Warrior ${userId.slice(-4)}`;
+      
+      await setDoc(userRef, {
+        userId: userId,
+        name: anonymousName,
+        points: points,
+        streak: streak,
+        badges: badges,
+        department: department,
+        lastUpdated: new Date().toISOString()
+      }, { merge: true });
+      
+      console.log("Successfully synced to Firebase leaderboard");
+    } catch (error) {
+      console.log("Offline mode - leaderboard data will sync when online");
+    }
+  };
 
   useEffect(() => {
     // Initialize state from localStorage
@@ -254,6 +293,13 @@ const HowTo = (props) => {
     const newPoints = currentPoints + item.points;
     localStorage.setItem("points", newPoints.toString());
     
+    // Get current badges count for Firebase sync
+    const currentBadges = JSON.parse(localStorage.getItem("badges") || "[]");
+    
+    // Sync to Firebase leaderboard
+    const currentStreak = parseInt(localStorage.getItem("streak") || "0");
+    syncToFirebase(newPoints, currentStreak, currentBadges.length);
+    
     // Remove coin animation after animation completes
     setTimeout(() => {
       setCoinAnimations(prev => prev.filter(coin => coin.id !== coinId));
@@ -265,6 +311,10 @@ const HowTo = (props) => {
       const currentStreak = parseInt(localStorage.getItem("streak") || "0");
       const newStreak = currentStreak + 1;
       localStorage.setItem("streak", newStreak.toString());
+      
+      // Sync updated streak to Firebase
+      const currentBadges = JSON.parse(localStorage.getItem("badges") || "[]");
+      syncToFirebase(newPoints, newStreak, currentBadges.length);
       
       // Show confetti and streak message
       createConfetti();
@@ -302,6 +352,11 @@ const HowTo = (props) => {
         earned: new Date().toISOString()
       }];
       localStorage.setItem("badges", JSON.stringify(newBadges));
+      
+      // Sync updated badges to Firebase
+      const currentPoints = parseInt(localStorage.getItem("points") || "0");
+      const currentStreak = parseInt(localStorage.getItem("streak") || "0");
+      syncToFirebase(currentPoints, currentStreak, newBadges.length);
     }
   };
 
