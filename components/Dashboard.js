@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styles from "./../styles/Dashboard.module.css";
 import HowTo from "./HowTo";
+import Leaderboard from "./Leaderboard";
+import DepartmentSelector from "./DepartmentSelector";
 
 const Dashboard = (props) => {
   const [points, setPoints] = useState(0);
@@ -8,6 +10,8 @@ const Dashboard = (props) => {
   const [badges, setBadges] = useState([]);
   const [dailyProgress, setDailyProgress] = useState(0);
   const [isOnCooldown, setIsOnCooldown] = useState(false);
+  const [department, setDepartment] = useState("");
+  const [showDepartmentSelector, setShowDepartmentSelector] = useState(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -20,6 +24,14 @@ const Dashboard = (props) => {
       }
       if (localStorage.getItem("badges") != null) {
         setBadges(JSON.parse(localStorage.getItem("badges")));
+      }
+      
+      // Load department preference
+      const savedDepartment = localStorage.getItem("department");
+      if (savedDepartment) {
+        setDepartment(savedDepartment);
+      } else {
+        setShowDepartmentSelector(true);
       }
       
       // Load daily progress
@@ -58,8 +70,17 @@ const Dashboard = (props) => {
     }
   };
 
+  const handleDepartmentSelect = (selectedDepartment) => {
+    setDepartment(selectedDepartment);
+    setShowDepartmentSelector(false);
+  };
+
   return (
     <div className={styles.dashboard}>
+      {showDepartmentSelector && (
+        <DepartmentSelector onDepartmentSelect={handleDepartmentSelect} />
+      )}
+      
       {/* Gamification Stats */}
       <div className={styles.gamificationStats}>
         <div className={styles.statCard}>
@@ -112,6 +133,15 @@ const Dashboard = (props) => {
           </div>
         </div>
       </div>
+      
+      {/* Leaderboard Section */}
+      <Leaderboard 
+        userPoints={points}
+        userStreak={streak}
+        userBadges={badges}
+        department={department}
+      />
+      
       <HowTo onPointsUpdate={handlePointsUpdate} />
       <div className={styles.button} onClick={() => props.setView(true)}>
         <img src="scanmore.svg" />

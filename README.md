@@ -45,28 +45,26 @@ Made by [Alyssa X](https://twitter.com/alyssaxuu) & [Leo](https://www.linkedin.c
 
 ## Gamification
 
-🏆 **Achievement System**: Earn badges for consecutive correct classifications<br>
-📈 **Progress Tracking**: Monitor your department's waste management improvement<br>
-🥇 **Leaderboards**: Compete with other departments for highest accuracy rates<br>
-🎯 **Daily Challenges**: Complete waste identification challenges for bonus points<br>
-⭐ **Streak Rewards**: Maintain classification streaks for multiplier bonuses<br>
-📊 **Performance Analytics**: Track learning progress and identify improvement areas<br>
+🏆 **Collective Leaderboard**: Real-time competition across Theatre and Pathology departments<br>
+📈 **Cross-Department Rankings**: See how your waste management skills compare hospital-wide<br>
+🥇 **Healthcare Heroes**: Anonymous competition with randomly generated healthcare hero names<br>
+🎯 **Daily Challenges**: Complete waste identification challenges for streak rewards<br>
+⭐ **Streak System**: Build consecutive day streaks for bonus recognition<br>
+📊 **Achievement Tracking**: Earn badges for learning milestones and consistent engagement<br>
+🔄 **Real-time Updates**: Watch your ranking update instantly as you earn points<br>
+
+### Collective Leaderboard Features
+- **Unified Competition**: Both Theatre and Pathology departments compete on the same leaderboard
+- **Top 3 Podium**: Special recognition with gold, silver, and bronze rankings
+- **Department Icons**: 🏥 Theatre Department and 🔬 Pathology Department identifiers
+- **Anonymous Privacy**: Compete safely with generated names like "Theatre Warrior 1234"
+- **Live Updates**: Rankings update in real-time as users earn points across the hospital
 
 ### Point System
-- **Correct Classification**: 10 points
-- **Streak Bonus**: +5 points per consecutive correct answer
-- **Daily Challenge**: 50 bonus points
-- **Weekly Challenge**: 200 bonus points
-- **Teaching Others**: 25 points for helping colleagues
-
-### Achievement Badges
-- 🏥 **Waste Warrior**: 100 correct classifications
-- 🎯 **Sharp Shooter**: 50 sharps correctly identified
-- 🔬 **Pathology Pro**: 25 pathology specimens classified
-- 🏆 **Department Champion**: Top scorer of the month
-- 📚 **Mentor**: Help 10 colleagues improve their scores
-- ⚡ **Speed Demon**: 20 rapid classifications in a row
-- 🛡️ **Safety First**: Perfect score on PPE requirement questions
+- **Disposal Guide Click**: 10 points per educational interaction
+- **Daily Challenge**: Complete 3 guide clicks for +1 streak
+- **Streak Bonus**: Build consecutive day streaks for leaderboard recognition
+- **Badge Rewards**: Earn achievement badges for reaching learning milestones
 
 ## Installation
 You can deploy to Vercel directly by [clicking here](https://vercel.com/new/clone?repository-url=https://github.com/alyssaxuu/ecosnap). 
