@@ -1,6 +1,6 @@
 # WasteWarrior Healthcare
 
-<!-- Complete Vercel redeploy: 2025-07-23-final -->
+<!-- Deploy to wastewarrior3.vercel.app: 2025-07-23 -->
 
 
 https://user-images.githubusercontent.com/7581348/208559445-a449cef6-0ae1-4c08-b9a5-c591062c3a3e.mp4
@@ -10,7 +10,7 @@ Manage medical waste better with Artificial Intelligence 🏥
 
 WasteWarrior Healthcare helps Theatre and Pathology departments classify and dispose of medical waste safely from a simple picture. Built with AI-powered waste identification and gamified learning for healthcare professionals.
 
-👉 [Try it now - it's free with no sign in needed](https://wastewarrior2.vercel.app)
+👉 [Try it now - it's free with no sign in needed](https://wastewarrior3.vercel.app)
 
 <!-- Final deployment with Leaderboard: 2025-07-23 -->
 
