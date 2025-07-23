@@ -9,6 +9,7 @@ const Settings = (props) => {
 				<span className={styles.header}>Settings</span>
 			</div>
 			<div className={styles.all}>
+				<div className={styles.item} onClick={() => props.setLeaderboard && props.setLeaderboard(true)}><span>🏆 Leaderboard</span> <img src="enter.svg"/></div>
 				<div className={styles.item} onClick={() => props.setReset(true)}><span>Update department</span> <img src="enter.svg"/></div>
 				<div className={styles.item} onClick={() => props.setOn(true)}><span>View onboarding</span> <img src="enter.svg"/></div>
 				<div className={styles.space}></div>

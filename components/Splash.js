@@ -6,6 +6,7 @@ import Dashboard from "./Dashboard";
 import Viewer from "./Viewer";
 import Settings from "./Settings";
 import Gamification from "./Gamification";
+import LeaderboardPage from "./LeaderboardPage";
 
 const Splash = (props) => {
 	const [getStarted, setGetStarted] = useState(false);
@@ -15,6 +16,7 @@ const Splash = (props) => {
 	const [settings, setSettings] = useState(false);
 	const [reset, setReset] = useState(false);
 	const [on, setOn] = useState(false);
+	const [leaderboard, setLeaderboard] = useState(false);
 
 	useEffect(() => {
 		// Only set done to true if user has clicked "Get started" AND region is set
@@ -54,10 +56,13 @@ const Splash = (props) => {
 			{view &&
 				<Viewer pred={props.pred} setPred={props.setPred} tensor={props.tensor} setTensor={props.setTensor} setView={setView} setNum={props.setNum} num={props.num} region={props.region}/>
 			}
-			{settings && !reset && !on &&
-				<Settings setSettings={setSettings} setReset={setReset} setOn={setOn} />
+			{leaderboard &&
+				<LeaderboardPage onBack={() => setLeaderboard(false)} />
 			}
-			{done && done2 && !view && !settings &&
+			{settings && !reset && !on &&
+				<Settings setSettings={setSettings} setReset={setReset} setOn={setOn} setLeaderboard={setLeaderboard} />
+			}
+			{done && done2 && !view && !settings && !leaderboard &&
 				<Dashboard setSettings={setSettings} setView={setView} num={props.num} setNum={props.setnum} region={props.region} />
 			}
 			{on &&
