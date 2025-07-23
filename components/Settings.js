@@ -2,9 +2,6 @@ import React from "react";
 import styles from "./../styles/Settings.module.css";
 
 const Settings = (props) => {
-	console.log('Settings props:', props);
-	console.log('setLeaderboard function exists:', typeof props.setLeaderboard === 'function');
-	
 	return (
 		<div className={styles.settings}>
 			<div className={styles.nav}>
