@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./../styles/Splash.module.css"
 import RegionSelect from "./RegionSelect";
+import DepartmentSelector from "./DepartmentSelector";
 import Onboarding from "./Onboarding";
 import Dashboard from "./Dashboard";
 import Viewer from "./Viewer";
@@ -50,6 +51,20 @@ const Splash = (props) => {
 		}
 	}
 
+	const handleDepartmentSelect = (departmentName) => {
+		// Map department names to region numbers
+		let regionNumber;
+		if (departmentName === "Theatre") {
+			regionNumber = 1; // Theatre Department
+		} else if (departmentName === "Pathology") {
+			regionNumber = 2; // Pathology Department
+		} else {
+			regionNumber = 3; // General Healthcare (fallback)
+		}
+		
+		handleRegion(regionNumber);
+	}
+
 	return (
 		<div className={styles.container}>
 			<Gamification />
@@ -75,7 +90,7 @@ const Splash = (props) => {
 				<RegionSelect handleRegion={handleRegion} region={props.region} />
 			}
 			{getStarted && !done &&
-				<RegionSelect handleRegion={handleRegion} region={props.region} />
+				<DepartmentSelector onDepartmentSelect={handleDepartmentSelect} />
 			}
 			{!getStarted &&
 			<div className={styles.splash}>
