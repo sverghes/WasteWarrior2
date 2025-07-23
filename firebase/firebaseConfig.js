@@ -3,8 +3,9 @@ import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 
 // Your web app's Firebase configuration
+// Note: Replace with your actual Firebase config for cloud features
 const firebaseConfig = {
-  apiKey: "AIzaSyDemoKey-ReplaceWithYourActualKey",
+  apiKey: "demo-key-please-replace-with-actual",
   authDomain: "wastewarrior-healthcare.firebaseapp.com",
   projectId: "wastewarrior-healthcare",
   storageBucket: "wastewarrior-healthcare.appspot.com",
@@ -13,7 +14,16 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+let app;
+let db;
+
+try {
+  app = initializeApp(firebaseConfig);
+  db = getFirestore(app);
+} catch (error) {
+  console.warn("Firebase not configured properly - app will run in offline mode");
+  db = null;
+}
 
 // Initialize Cloud Firestore and get a reference to the service
-export const db = getFirestore(app);
+export { db };

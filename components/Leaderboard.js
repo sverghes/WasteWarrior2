@@ -22,9 +22,14 @@ const Leaderboard = ({ userPoints, userStreak, userBadges, department }) => {
   useEffect(() => {
     if (!userId) return;
 
-    // Update user data in Firestore
+    // Update user data in Firestore (graceful failure)
     const updateUserData = async () => {
       try {
+        if (!db) {
+          console.log("Firebase not configured - using local storage only");
+          return;
+        }
+        
         const userRef = doc(db, "leaderboard", userId);
         const anonymousName = `${department} Warrior ${userId.slice(-4)}`;
         
@@ -48,37 +53,48 @@ const Leaderboard = ({ userPoints, userStreak, userBadges, department }) => {
   useEffect(() => {
     if (!userId) return;
 
-    // Listen to leaderboard changes
-    const q = query(
-      collection(db, "leaderboard"),
-      orderBy("points", "desc"),
-      limit(50)
-    );
+    try {
+      if (!db) {
+        console.log("Firebase not configured - showing local leaderboard");
+        setLoading(false);
+        return;
+      }
 
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const leaderboardData = [];
-      let rank = 1;
-      
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        leaderboardData.push({
-          ...data,
-          rank: rank++
+      // Listen to leaderboard changes
+      const q = query(
+        collection(db, "leaderboard"),
+        orderBy("points", "desc"),
+        limit(50)
+      );
+
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        const leaderboardData = [];
+        let rank = 1;
+        
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          leaderboardData.push({
+            ...data,
+            rank: rank++
+          });
+          
+          if (data.userId === userId) {
+            setUserRank(rank - 1);
+          }
         });
         
-        if (data.userId === userId) {
-          setUserRank(rank - 1);
-        }
+        setLeaderboard(leaderboardData);
+        setLoading(false);
+      }, (error) => {
+        console.log("Offline mode - showing cached leaderboard");
+        setLoading(false);
       });
-      
-      setLeaderboard(leaderboardData);
-      setLoading(false);
-    }, (error) => {
-      console.log("Offline mode - showing cached leaderboard");
-      setLoading(false);
-    });
 
-    return () => unsubscribe();
+      return () => unsubscribe();
+    } catch (error) {
+      console.log("Firebase error - using offline mode");
+      setLoading(false);
+    }
   }, [userId]);
 
   const getDepartmentIcon = (dept) => {

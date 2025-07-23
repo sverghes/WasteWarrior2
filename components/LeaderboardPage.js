@@ -10,54 +10,75 @@ const LeaderboardPage = ({ onBack }) => {
   const [activeTab, setActiveTab] = useState("all");
 
   useEffect(() => {
-    // Listen to leaderboard changes
-    const q = query(
-      collection(db, "leaderboard"),
-      orderBy("points", "desc"),
-      limit(100)
-    );
+    // Try to connect to Firebase, but handle offline gracefully
+    try {
+      if (!db) {
+        // Firebase not configured - use local storage only
+        setLeaderboard([]);
+        setLoading(false);
+        return;
+      }
 
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const leaderboardData = [];
-      const deptStats = {
-        Theatre: { totalPoints: 0, users: 0, avgPoints: 0 },
-        Pathology: { totalPoints: 0, users: 0, avgPoints: 0 }
-      };
-      
-      let rank = 1;
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        leaderboardData.push({
-          ...data,
-          rank: rank++
+      // Listen to leaderboard changes
+      const q = query(
+        collection(db, "leaderboard"),
+        orderBy("points", "desc"),
+        limit(100)
+      );
+
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        const leaderboardData = [];
+        const deptStats = {
+          Theatre: { totalPoints: 0, users: 0, avgPoints: 0 },
+          Pathology: { totalPoints: 0, users: 0, avgPoints: 0 }
+        };
+        
+        let rank = 1;
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          leaderboardData.push({
+            ...data,
+            rank: rank++
+          });
+          
+          // Calculate department statistics
+          if (deptStats[data.department]) {
+            deptStats[data.department].totalPoints += data.points;
+            deptStats[data.department].users += 1;
+          }
         });
         
-        // Calculate department statistics
-        if (deptStats[data.department]) {
-          deptStats[data.department].totalPoints += data.points;
-          deptStats[data.department].users += 1;
-        }
+        // Calculate averages
+        Object.keys(deptStats).forEach(dept => {
+          if (deptStats[dept].users > 0) {
+            deptStats[dept].avgPoints = Math.round(deptStats[dept].totalPoints / deptStats[dept].users);
+          }
+        });
+        
+        setLeaderboard(leaderboardData);
+        setDepartmentStats(deptStats);
+        setLoading(false);
+      }, (error) => {
+        console.log("Offline mode - showing local placeholder");
+        // Show empty state for offline mode
+        setLeaderboard([]);
+        setDepartmentStats({
+          Theatre: { totalPoints: 0, users: 0, avgPoints: 0 },
+          Pathology: { totalPoints: 0, users: 0, avgPoints: 0 }
+        });
+        setLoading(false);
       });
-      
-      // Calculate averages
-      Object.keys(deptStats).forEach(dept => {
-        if (deptStats[dept].users > 0) {
-          deptStats[dept].avgPoints = Math.round(deptStats[dept].totalPoints / deptStats[dept].users);
-        }
-      });
-      
-      setLeaderboard(leaderboardData);
-      setDepartmentStats(deptStats);
-      setLoading(false);
-    }, (error) => {
-      console.log("Offline mode - showing cached leaderboard");
-      // Show local storage data for offline mode
-      const localData = JSON.parse(localStorage.getItem("leaderboardCache") || "[]");
-      setLeaderboard(localData);
-      setLoading(false);
-    });
 
-    return () => unsubscribe();
+      return () => unsubscribe();
+    } catch (error) {
+      console.log("Firebase not configured - using offline mode");
+      setLeaderboard([]);
+      setDepartmentStats({
+        Theatre: { totalPoints: 0, users: 0, avgPoints: 0 },
+        Pathology: { totalPoints: 0, users: 0, avgPoints: 0 }
+      });
+      setLoading(false);
+    }
   }, []);
 
   const getDepartmentIcon = (dept) => {

@@ -30,13 +30,15 @@ The collective leaderboard system uses Firebase Firestore to store and sync user
 Replace the placeholder values in `/firebase/firebaseConfig.js` with your actual Firebase config:
 
 ```javascript
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "your-actual-api-key",
-  authDomain: "your-project-id.firebaseapp.com",
-  projectId: "your-project-id",
-  storageBucket: "your-project-id.firebasestorage.app",
-  messagingSenderId: "your-messaging-sender-id",
-  appId: "your-app-id"
+  apiKey: "AIzaSyCBhkhr1A6fOEuM7Um4ld2qL6FloVCFj5Y",
+  authDomain: "wastewarrior-healthcare.firebaseapp.com",
+  projectId: "wastewarrior-healthcare",
+  storageBucket: "wastewarrior-healthcare.firebasestorage.app",
+  messagingSenderId: "618257929283",
+  appId: "1:618257929283:web:240412ae2d664f82e0f0f6",
+  measurementId: "G-DQJ3TPXQRV"
 };
 ```
 
