@@ -8,7 +8,9 @@ Manage medical waste better with Artificial Intelligence 🏥
 
 WasteWarrior Healthcare helps Theatre and Pathology departments classify and dispose of medical waste safely from a simple picture. Built with AI-powered waste identification and gamified learning for healthcare professionals.
 
-👉 [Try it now - it's free with no sign in needed](https://ecosnap.vercel.app)
+👉 [Try it now - it's free with no sign in needed](https://wastewarrior2.vercel.app)
+
+<!-- Deployment trigger: 2025-07-23 -->
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/alyssaxuu/ecosnap)
 
