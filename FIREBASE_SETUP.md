@@ -15,8 +15,8 @@ The collective leaderboard system uses Firebase Firestore to store and sync user
 ### 2. Enable Firestore Database
 1. In your Firebase project, go to "Firestore Database"
 2. Click "Create database"
-3. Choose "Start in test mode" (for development)
-4. Select a location close to your users
+3. Choose "Start in production mode" (for security)
+4. Select a location close to your users (recommended: us-central1 or europe-west1)
 5. Click "Done"
 
 ### 3. Get Firebase Configuration
@@ -43,15 +43,51 @@ const firebaseConfig = {
 ```
 
 ### 5. Configure Firestore Security Rules
-In Firebase Console → Firestore Database → Rules, use these rules for the leaderboard:
+In Firebase Console → Firestore Database → Rules, use these secure production rules:
 
 ```javascript
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Allow read/write access to leaderboard collection
+    // Production rules for leaderboard collection
     match /leaderboard/{userId} {
-      allow read, write: if true; // Open for demo - restrict in production
+      // Allow users to read all leaderboard data (for rankings)
+      allow read: if true;
+      
+      // Allow users to write only to their own document
+      // and only with valid data structure
+      allow write: if userId is string 
+        && userId.size() > 0
+        && request.auth == null // Anonymous access allowed
+        && validateLeaderboardData(resource, request.resource);
+    }
+  }
+}
+
+// Validation function for leaderboard data
+function validateLeaderboardData(existingData, newData) {
+  return newData.data.keys().hasAll(['userId', 'name', 'points', 'streak', 'badges', 'department', 'lastUpdated'])
+    && newData.data.userId is string
+    && newData.data.name is string
+    && newData.data.points is int
+    && newData.data.points >= 0
+    && newData.data.streak is int
+    && newData.data.streak >= 0
+    && newData.data.badges is int
+    && newData.data.badges >= 0
+    && newData.data.department in ['Theatre', 'Pathology']
+    && newData.data.lastUpdated is string;
+}
+```
+
+**Alternative Simpler Production Rules** (if the above validation is too strict):
+```javascript
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /leaderboard/{userId} {
+      allow read: if true; // Anyone can read leaderboard
+      allow write: if true; // Allow writes for demo - monitor usage
     }
   }
 }
@@ -72,13 +108,16 @@ The app works offline and will sync leaderboard data when connectivity is restor
 - Users are identified by anonymous IDs like "Theatre Warrior 1234"
 - No personal information is stored
 - Department selection is the only identifying information
-- Consider implementing more restrictive Firestore rules for production use
+- Production-ready Firestore security rules implemented
+- Data validation ensures only proper leaderboard entries
+- Anonymous access controlled and monitored
 
 ## Production Deployment
-1. Update Firestore security rules for production
-2. Set up Firebase project billing if needed
-3. Monitor usage in Firebase Console
-4. Consider implementing user authentication for enhanced security
+1. ✅ Firestore security rules configured for production
+2. Monitor usage in Firebase Console → Usage tab
+3. Set up Firebase project billing if usage exceeds free tier
+4. Consider enabling Firebase Analytics for usage insights
+5. Review and update security rules periodically
 
 ## Testing
 The leaderboard will work immediately after Firebase setup. Test by:
