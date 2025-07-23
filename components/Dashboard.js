@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "./../styles/Dashboard.module.css";
 import HowTo from "./HowTo";
-import Leaderboard from "./Leaderboard";
 import DepartmentSelector from "./DepartmentSelector";
 
 const Dashboard = (props) => {
@@ -133,14 +132,6 @@ const Dashboard = (props) => {
           </div>
         </div>
       </div>
-      
-      {/* Leaderboard Section */}
-      <Leaderboard 
-        userPoints={points}
-        userStreak={streak}
-        userBadges={badges}
-        department={department}
-      />
       
       <HowTo onPointsUpdate={handlePointsUpdate} />
       <div className={styles.button} onClick={() => props.setView(true)}>
