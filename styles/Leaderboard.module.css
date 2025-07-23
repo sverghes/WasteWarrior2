@@ -1,10 +1,11 @@
 .leaderboard {
-  background: linear-gradient(135deg, #61AF2B 0%, #74AD42 100%);
+  background: #FFFFFF;
   border-radius: 20px;
   padding: 20px;
   margin: 20px 0;
-  color: white;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  color: #61AF2B;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(97, 175, 43, 0.2);
 }
 
 .header {
@@ -25,12 +26,13 @@
 }
 
 .userRank {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(97, 175, 43, 0.1);
   padding: 8px 15px;
   border-radius: 20px;
   margin-top: 10px;
   font-weight: bold;
   display: inline-block;
+  border: 1px solid rgba(97, 175, 43, 0.3);
 }
 
 .topThree {
@@ -41,26 +43,28 @@
 }
 
 .podium {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(97, 175, 43, 0.05);
   border-radius: 15px;
   padding: 15px;
   text-align: center;
   min-width: 100px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(97, 175, 43, 0.2);
 }
 
 .rank1 {
   transform: scale(1.1);
-  background: rgba(56, 161, 105, 0.3);
+  background: rgba(97, 175, 43, 0.15);
+  border: 2px solid #61AF2B;
 }
 
 .rank2 {
-  background: rgba(116, 173, 66, 0.2);
+  background: rgba(116, 173, 66, 0.1);
+  border: 2px solid #74AD42;
 }
 
 .rank3 {
-  background: rgba(97, 175, 43, 0.15);
+  background: rgba(56, 161, 105, 0.1);
+  border: 2px solid #38a169;
 }
 
 .podiumRank {
@@ -78,7 +82,7 @@
 .podiumPoints {
   font-size: 14px;
   font-weight: bold;
-  color: #FFFFFF;
+  color: #74AD42;
 }
 
 .podiumBadges {
@@ -103,7 +107,7 @@
 }
 
 .fullList::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(97, 175, 43, 0.4);
   border-radius: 3px;
 }
 
@@ -112,15 +116,14 @@
   align-items: center;
   padding: 12px 15px;
   margin-bottom: 8px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(97, 175, 43, 0.05);
   border-radius: 12px;
-  backdrop-filter: blur(5px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(97, 175, 43, 0.2);
 }
 
 .currentUser {
-  background: rgba(56, 161, 105, 0.3);
-  border: 1px solid rgba(56, 161, 105, 0.6);
+  background: rgba(97, 175, 43, 0.15);
+  border: 2px solid #61AF2B;
   font-weight: bold;
 }
 
@@ -149,16 +152,16 @@
 }
 
 .points {
-  color: #FFFFFF;
+  color: #74AD42;
   font-weight: bold;
 }
 
 .streak {
-  color: #E8F5E8;
+  color: #61AF2B;
 }
 
 .badges {
-  color: #C6F6D5;
+  color: #38a169;
 }
 
 .empty {

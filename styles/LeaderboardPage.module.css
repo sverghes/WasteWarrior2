@@ -1,7 +1,7 @@
 .leaderboardPage {
-  background: linear-gradient(135deg, #61AF2B 0%, #74AD42 100%);
+  background: #FFFFFF;
   min-height: 100vh;
-  color: white;
+  color: #61AF2B;
   padding: 20px;
   overflow-y: auto;
 }
@@ -16,8 +16,8 @@
   position: absolute;
   left: 0;
   top: 0;
-  background: rgba(255, 255, 255, 0.2);
-  border: none;
+  background: rgba(97, 175, 43, 0.1);
+  border: 1px solid rgba(97, 175, 43, 0.3);
   border-radius: 50%;
   width: 40px;
   height: 40px;
@@ -29,14 +29,14 @@
 }
 
 .backButton:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(97, 175, 43, 0.2);
   transform: scale(1.1);
 }
 
 .backButton img {
   width: 20px;
   height: 20px;
-  filter: invert(1);
+  filter: none;
 }
 
 .header h1 {
@@ -70,11 +70,10 @@
 }
 
 .statCard {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(97, 175, 43, 0.05);
   border-radius: 15px;
   padding: 20px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(97, 175, 43, 0.2);
   text-align: center;
 }
 
@@ -98,7 +97,7 @@
 .totalPoints {
   font-size: 20px;
   font-weight: bold;
-  color: #FFFFFF;
+  color: #74AD42;
 }
 
 .userCount {
@@ -119,12 +118,12 @@
 
 /* Department Winner */
 .departmentWinner {
-  background: rgba(56, 161, 105, 0.3);
+  background: rgba(97, 175, 43, 0.1);
   border-radius: 15px;
   padding: 20px;
   margin-bottom: 30px;
   text-align: center;
-  border: 1px solid rgba(56, 161, 105, 0.6);
+  border: 2px solid rgba(97, 175, 43, 0.3);
 }
 
 .departmentWinner h3 {
@@ -157,9 +156,9 @@
 }
 
 .tab {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: white;
+  background: rgba(97, 175, 43, 0.1);
+  border: 1px solid rgba(97, 175, 43, 0.3);
+  color: #61AF2B;
   border-radius: 20px;
   padding: 10px 20px;
   cursor: pointer;
@@ -168,12 +167,13 @@
 }
 
 .tab:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(97, 175, 43, 0.2);
 }
 
 .activeTab {
-  background: rgba(56, 161, 105, 0.4) !important;
-  border-color: rgba(56, 161, 105, 0.8) !important;
+  background: #61AF2B !important;
+  border-color: #61AF2B !important;
+  color: white !important;
   font-weight: bold;
 }
 
@@ -194,7 +194,7 @@
 }
 
 .leaderboardList::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(97, 175, 43, 0.4);
   border-radius: 3px;
 }
 
@@ -203,10 +203,9 @@
   align-items: center;
   padding: 15px 20px;
   margin-bottom: 10px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(97, 175, 43, 0.05);
   border-radius: 12px;
-  backdrop-filter: blur(5px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(97, 175, 43, 0.2);
 }
 
 .rank {
@@ -214,7 +213,7 @@
   margin-right: 20px;
   min-width: 40px;
   font-size: 18px;
-  color: #FFFFFF;
+  color: #74AD42;
 }
 
 .userInfo {
@@ -235,16 +234,16 @@
 }
 
 .points {
-  color: #FFFFFF;
+  color: #74AD42;
   font-weight: bold;
 }
 
 .streak {
-  color: #E8F5E8;
+  color: #61AF2B;
 }
 
 .badges {
-  color: #C6F6D5;
+  color: #38a169;
 }
 
 .empty {
