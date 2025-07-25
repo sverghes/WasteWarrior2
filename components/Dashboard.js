@@ -9,7 +9,7 @@ const Dashboard = (props) => {
   const [points, setPoints] = useState(0);
   const [streak, setStreak] = useState(0);
   const [badges, setBadges] = useState([]);
-  const [badgeIds, setBadgeIds] = useState([]);
+  const [badgeIds, setBadgeIds] = useState({ muffin: [], coffee: [] });
   const [dailyProgress, setDailyProgress] = useState(0);
   const [isOnCooldown, setIsOnCooldown] = useState(false);
   const [department, setDepartment] = useState("");
@@ -28,7 +28,12 @@ const Dashboard = (props) => {
         setBadges(JSON.parse(localStorage.getItem("badges")));
       }
       if (localStorage.getItem("badgeIds") != null) {
-        setBadgeIds(JSON.parse(localStorage.getItem("badgeIds")));
+        const savedBadgeIds = JSON.parse(localStorage.getItem("badgeIds"));
+        // Ensure the saved data has the correct structure
+        setBadgeIds({
+          muffin: savedBadgeIds?.muffin || [],
+          coffee: savedBadgeIds?.coffee || []
+        });
       }
       
       // Load department preference
