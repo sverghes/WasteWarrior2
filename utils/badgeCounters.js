@@ -55,73 +55,71 @@ export const generateBadgeId = async (badgeType) => {
 };
 
 /**
- * Awards badges and generates secure IDs for them
+ * Award badges based on streak and existing badge IDs (ONE AT A TIME)
  * @param {number} streak - Current streak count
  * @param {object} existingBadgeIds - Object with muffin and coffee arrays of badge IDs
  * @returns {Promise<object>} - Object with badge counts and new badge IDs
  */
 export const awardBadges = async (streak, existingBadgeIds = { muffin: [], coffee: [] }) => {
-  const currentBadges = calculateBadgeCount(streak);
   const existingMuffinIds = existingBadgeIds.muffin || [];
   const existingCoffeeIds = existingBadgeIds.coffee || [];
+  const totalExistingBadges = existingMuffinIds.length + existingCoffeeIds.length;
   
   const newMuffinIds = [...existingMuffinIds];
   const newCoffeeIds = [...existingCoffeeIds];
   
-  // Award new muffin badges
-  const muffinsToAward = currentBadges.muffin - existingMuffinIds.length;
-  for (let i = 0; i < muffinsToAward; i++) {
-    const muffinId = await generateBadgeId('muffin');
-    newMuffinIds.push(muffinId);
+  // Only award badges on streaks divisible by 3
+  if (streak < 3 || streak % 3 !== 0) {
+    return {
+      muffin: existingMuffinIds.length,
+      coffee: existingCoffeeIds.length,
+      total: totalExistingBadges,
+      badgeIds: {
+        muffin: newMuffinIds,
+        coffee: newCoffeeIds
+      },
+      newBadgesAwarded: 0
+    };
   }
   
-  // Award new coffee badges
-  const coffeesToAward = currentBadges.coffee - existingCoffeeIds.length;
-  for (let i = 0; i < coffeesToAward; i++) {
-    const coffeeId = await generateBadgeId('coffee');
-    newCoffeeIds.push(coffeeId);
+  // Calculate how many milestones (multiples of 3) should have been reached
+  const milestones = Math.floor(streak / 3);
+  
+  // If user has fewer badges than milestones, award only the next one
+  if (totalExistingBadges < milestones) {
+    const nextBadgeNumber = totalExistingBadges + 1;
+    const badgeType = nextBadgeNumber % 2 === 1 ? 'muffin' : 'coffee';
+    
+    if (badgeType === 'muffin') {
+      const muffinId = await generateBadgeId('muffin');
+      newMuffinIds.push(muffinId);
+    } else {
+      const coffeeId = await generateBadgeId('coffee');
+      newCoffeeIds.push(coffeeId);
+    }
+    
+    return {
+      muffin: newMuffinIds.length,
+      coffee: newCoffeeIds.length,
+      total: newMuffinIds.length + newCoffeeIds.length,
+      badgeIds: {
+        muffin: newMuffinIds,
+        coffee: newCoffeeIds
+      },
+      newBadgesAwarded: 1
+    };
   }
   
+  // No new badges to award
   return {
-    muffin: currentBadges.muffin,
-    coffee: currentBadges.coffee,
-    total: currentBadges.total,
+    muffin: existingMuffinIds.length,
+    coffee: existingCoffeeIds.length,
+    total: totalExistingBadges,
     badgeIds: {
       muffin: newMuffinIds,
       coffee: newCoffeeIds
     },
-    newBadgesAwarded: muffinsToAward + coffeesToAward
-  };
-};
-
-/**
- * Calculate badges based on streak count (internal helper)
- * @param {number} streak - Current streak count
- * @returns {object} - Object with muffin and coffee badge counts
- */
-const calculateBadgeCount = (streak) => {
-  // Only award badges on streaks divisible by 3
-  if (streak < 3 || streak % 3 !== 0) {
-    return {
-      muffin: 0,
-      coffee: 0,
-      total: 0
-    };
-  }
-  
-  // Calculate how many milestones (multiples of 3) have been reached
-  const milestones = Math.floor(streak / 3);
-  
-  // Alternate between muffin and coffee badges
-  // Odd milestones (1st, 3rd, 5th...) = Muffin badges (streak 3, 9, 15...)
-  // Even milestones (2nd, 4th, 6th...) = Coffee badges (streak 6, 12, 18...)
-  const muffinBadges = Math.ceil(milestones / 2); // Round up for odd milestones
-  const coffeeBadges = Math.floor(milestones / 2); // Round down for even milestones
-  
-  return {
-    muffin: muffinBadges,
-    coffee: coffeeBadges,
-    total: muffinBadges + coffeeBadges
+    newBadgesAwarded: 0
   };
 };
 

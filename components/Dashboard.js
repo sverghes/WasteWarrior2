@@ -4,6 +4,9 @@ import HowTo from "./HowTo";
 import DepartmentSelector from "./DepartmentSelector";
 import { calculateBadges, getBadgeDisplay } from "../utils/badges";
 import { awardBadges, getBadgeIdSummary } from "../utils/badgeCounters";
+import { db } from "../firebase/firebaseConfig";
+import { doc, setDoc } from "firebase/firestore";
+import { getUserWarriorId, formatWarriorName } from "../utils/warriorId";
 
 const Dashboard = (props) => {
   const [points, setPoints] = useState(0);
@@ -61,6 +64,34 @@ const Dashboard = (props) => {
   // Calculate current badges based on streak
   const currentBadges = calculateBadges(streak);
 
+  // Function to sync user data to Firebase leaderboard
+  const syncToFirebase = async (points, streak, totalBadges, department) => {
+    try {
+      if (!db || !department) {
+        console.log("Firebase not configured or department not set - using local storage only");
+        return;
+      }
+
+      const userId = await getUserWarriorId(department);
+      const userRef = doc(db, "leaderboard", userId);
+      const warriorName = formatWarriorName(userId, department);
+      
+      await setDoc(userRef, {
+        userId: userId,
+        name: warriorName,
+        points: points,
+        streak: streak,
+        badges: totalBadges,
+        department: department,
+        lastUpdated: new Date().toISOString()
+      }, { merge: true });
+      
+      console.log("Dashboard: Successfully synced to Firebase leaderboard");
+    } catch (error) {
+      console.log("Dashboard: Offline mode - leaderboard data will sync when online");
+    }
+  };
+
   const handlePointsUpdate = (newPoints) => {
     setPoints(newPoints);
     
@@ -90,6 +121,11 @@ const Dashboard = (props) => {
       if (badgeResult.newBadgesAwarded > 0) {
         setBadgeIds(badgeResult.badgeIds);
         localStorage.setItem("badgeIds", JSON.stringify(badgeResult.badgeIds));
+        
+        // Sync to Firebase when new badges are awarded
+        const currentPoints = parseInt(localStorage.getItem("points") || "0");
+        const currentDepartment = localStorage.getItem("department") || department;
+        syncToFirebase(currentPoints, newStreak, badgeResult.total, currentDepartment);
       }
     } catch (error) {
       console.log("Error updating badge IDs:", error);

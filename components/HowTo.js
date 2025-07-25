@@ -288,12 +288,13 @@ const HowTo = (props) => {
     const newPoints = currentPoints + item.points;
     localStorage.setItem("points", newPoints.toString());
     
-    // Get current badges count for Firebase sync
-    const currentBadges = JSON.parse(localStorage.getItem("badges") || "[]");
+    // Get current badges count for Firebase sync (using new badgeIds system)
+    const badgeIds = JSON.parse(localStorage.getItem("badgeIds") || '{"muffin": [], "coffee": []}');
+    const totalBadges = (badgeIds.muffin?.length || 0) + (badgeIds.coffee?.length || 0);
     
     // Sync to Firebase leaderboard
     const currentStreak = parseInt(localStorage.getItem("streak") || "0");
-    syncToFirebase(newPoints, currentStreak, currentBadges.length);
+    syncToFirebase(newPoints, currentStreak, totalBadges);
     
     // Remove coin animation after animation completes
     setTimeout(() => {
@@ -307,9 +308,10 @@ const HowTo = (props) => {
       const newStreak = currentStreak + 1;
       localStorage.setItem("streak", newStreak.toString());
       
-      // Sync updated streak to Firebase
-      const currentBadges = JSON.parse(localStorage.getItem("badges") || "[]");
-      syncToFirebase(newPoints, newStreak, currentBadges.length);
+      // Sync updated streak to Firebase (using new badgeIds system)
+      const badgeIds = JSON.parse(localStorage.getItem("badgeIds") || '{"muffin": [], "coffee": []}');
+      const totalBadges = (badgeIds.muffin?.length || 0) + (badgeIds.coffee?.length || 0);
+      syncToFirebase(newPoints, newStreak, totalBadges);
       
       // Show confetti and streak message
       createConfetti();
@@ -337,21 +339,14 @@ const HowTo = (props) => {
       }
     }
     
-    // Check if all items are clicked (badge increment)
+    // Check if all items are clicked (sync current state to Firebase)
     if (newClickedItems.size === items.length) {
-      const currentBadges = JSON.parse(localStorage.getItem("badges") || "[]");
-      const newBadges = [...currentBadges, {
-        id: Date.now(),
-        name: "Guide Master",
-        description: "Completed all disposal guide items",
-        earned: new Date().toISOString()
-      }];
-      localStorage.setItem("badges", JSON.stringify(newBadges));
-      
-      // Sync updated badges to Firebase
+      // Sync current state to Firebase (guide completion doesn't award badges in new system)
+      const badgeIds = JSON.parse(localStorage.getItem("badgeIds") || '{"muffin": [], "coffee": []}');
+      const totalBadges = (badgeIds.muffin?.length || 0) + (badgeIds.coffee?.length || 0);
       const currentPoints = parseInt(localStorage.getItem("points") || "0");
       const currentStreak = parseInt(localStorage.getItem("streak") || "0");
-      syncToFirebase(currentPoints, currentStreak, newBadges.length);
+      syncToFirebase(currentPoints, currentStreak, totalBadges);
     }
   };
 
