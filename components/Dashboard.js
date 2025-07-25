@@ -60,7 +60,6 @@ const Dashboard = (props) => {
 
   // Calculate current badges based on streak
   const currentBadges = calculateBadges(streak);
-  const badgeDisplay = getBadgeDisplay(currentBadges.muffin, currentBadges.coffee);
 
   const handlePointsUpdate = (newPoints) => {
     setPoints(newPoints);
@@ -136,20 +135,6 @@ const Dashboard = (props) => {
               </div>
             ) : (
               "Badges"
-            )}
-          </div>
-          <div className={styles.badgeDisplay}>
-            {badgeDisplay.slice(0, 6).map((badge, index) => (
-              <img 
-                key={index} 
-                src={badge.image} 
-                alt={badge.alt} 
-                title={badge.title}
-                className={styles.badgeIcon}
-              />
-            ))}
-            {badgeDisplay.length > 6 && (
-              <span className={styles.badgeMore}>+{badgeDisplay.length - 6}</span>
             )}
           </div>
         </div>

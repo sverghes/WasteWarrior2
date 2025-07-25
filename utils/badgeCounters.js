@@ -57,35 +57,39 @@ export const generateBadgeId = async (badgeType) => {
 /**
  * Awards badges and generates secure IDs for them
  * @param {number} streak - Current streak count
- * @param {array} existingBadgeIds - Array of existing badge IDs for this user
+ * @param {object} existingBadgeIds - Object with muffin and coffee arrays of badge IDs
  * @returns {Promise<object>} - Object with badge counts and new badge IDs
  */
-export const awardBadges = async (streak, existingBadgeIds = []) => {
+export const awardBadges = async (streak, existingBadgeIds = { muffin: [], coffee: [] }) => {
   const currentBadges = calculateBadgeCount(streak);
-  const existingMuffinIds = existingBadgeIds.filter(id => id.startsWith('MUF'));
-  const existingCoffeeIds = existingBadgeIds.filter(id => id.startsWith('COF'));
+  const existingMuffinIds = existingBadgeIds.muffin || [];
+  const existingCoffeeIds = existingBadgeIds.coffee || [];
   
-  const newBadgeIds = [...existingBadgeIds];
+  const newMuffinIds = [...existingMuffinIds];
+  const newCoffeeIds = [...existingCoffeeIds];
   
   // Award new muffin badges
   const muffinsToAward = currentBadges.muffin - existingMuffinIds.length;
   for (let i = 0; i < muffinsToAward; i++) {
     const muffinId = await generateBadgeId('muffin');
-    newBadgeIds.push(muffinId);
+    newMuffinIds.push(muffinId);
   }
   
   // Award new coffee badges
   const coffeesToAward = currentBadges.coffee - existingCoffeeIds.length;
   for (let i = 0; i < coffeesToAward; i++) {
     const coffeeId = await generateBadgeId('coffee');
-    newBadgeIds.push(coffeeId);
+    newCoffeeIds.push(coffeeId);
   }
   
   return {
     muffin: currentBadges.muffin,
     coffee: currentBadges.coffee,
     total: currentBadges.total,
-    badgeIds: newBadgeIds,
+    badgeIds: {
+      muffin: newMuffinIds,
+      coffee: newCoffeeIds
+    },
     newBadgesAwarded: muffinsToAward + coffeesToAward
   };
 };
@@ -108,12 +112,12 @@ const calculateBadgeCount = (streak) => {
 
 /**
  * Get badge display summary with latest badge IDs
- * @param {array} badgeIds - Array of badge IDs for this user
+ * @param {object} badgeIds - Object with muffin and coffee arrays of badge IDs
  * @returns {string} - Summary text with latest badge IDs
  */
-export const getBadgeIdSummary = (badgeIds = []) => {
-  const muffinIds = badgeIds.filter(id => id.startsWith('MUF'));
-  const coffeeIds = badgeIds.filter(id => id.startsWith('COF'));
+export const getBadgeIdSummary = (badgeIds = { muffin: [], coffee: [] }) => {
+  const muffinIds = badgeIds.muffin || [];
+  const coffeeIds = badgeIds.coffee || [];
   
   if (muffinIds.length === 0 && coffeeIds.length === 0) {
     return 'No badges';
@@ -155,9 +159,9 @@ export const getDepartmentBadgeIds = (leaderboardData, department) => {
   let allCoffeeIds = [];
   
   departmentUsers.forEach(user => {
-    const userBadgeIds = user.badgeIds || [];
-    allMuffinIds = allMuffinIds.concat(userBadgeIds.filter(id => id.startsWith('MUF')));
-    allCoffeeIds = allCoffeeIds.concat(userBadgeIds.filter(id => id.startsWith('COF')));
+    const userBadgeIds = user.badgeIds || { muffin: [], coffee: [] };
+    allMuffinIds = allMuffinIds.concat(userBadgeIds.muffin || []);
+    allCoffeeIds = allCoffeeIds.concat(userBadgeIds.coffee || []);
   });
   
   return {
