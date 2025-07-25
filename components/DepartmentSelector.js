@@ -1,8 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "../styles/DepartmentSelector.module.css";
 
 const DepartmentSelector = ({ onDepartmentSelect }) => {
   const [selectedDepartment, setSelectedDepartment] = useState("");
+  const [previewWarriorIds, setPreviewWarriorIds] = useState({
+    Theatre: "TW####",
+    Pathology: "PW####"
+  });
+
+  useEffect(() => {
+    // Generate preview IDs to show what IDs users will get
+    const generatePreviews = () => {
+      // For new users, show the format they'll get
+      setPreviewWarriorIds({
+        Theatre: "TW####",
+        Pathology: "PW####"
+      });
+    };
+
+    generatePreviews();
+  }, []);
 
   const handleContinue = () => {
     if (selectedDepartment) {
@@ -27,6 +44,7 @@ const DepartmentSelector = ({ onDepartmentSelect }) => {
             <div className={styles.emoji}>🏥</div>
             <div className={styles.name}>Theatre Department</div>
             <div className={styles.desc}>Surgical and operating theatre waste</div>
+            <div className={styles.warriorPreview}>You'll get WarriorID: {previewWarriorIds.Theatre}</div>
           </div>
           
           <div 
@@ -36,6 +54,7 @@ const DepartmentSelector = ({ onDepartmentSelect }) => {
             <div className={styles.emoji}>🔬</div>
             <div className={styles.name}>Pathology Department</div>
             <div className={styles.desc}>Laboratory and specimen waste</div>
+            <div className={styles.warriorPreview}>You'll get WarriorID: {previewWarriorIds.Pathology}</div>
           </div>
         </div>
         

@@ -94,6 +94,18 @@
   line-height: 1.3;
 }
 
+.warriorPreview {
+  font-size: 12px;
+  margin-top: 8px;
+  padding: 5px 10px;
+  background: rgba(255, 215, 0, 0.2);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 215, 0, 0.4);
+  font-family: monospace;
+  font-weight: bold;
+  color: #FFD700;
+}
+
 .continueBtn {
   background: linear-gradient(135deg, #4CAF50, #45a049);
   color: white;

@@ -62,6 +62,34 @@
 	color: #8C8C8C;
 }
 
+/* WarriorID Display */
+.currentWarrior {
+	background: #F0F7E6;
+	border: 1px solid #74AD42;
+	border-radius: 8px;
+	padding: 15px 20px;
+	margin: 20px 20px 10px 20px;
+	text-align: center;
+}
+.currentLabel {
+	font-size: 12px;
+	color: #666;
+	margin-bottom: 5px;
+}
+.currentId {
+	font-size: 18px;
+	font-weight: bold;
+	color: #74AD42;
+	font-family: monospace;
+}
+.warriorPreview {
+	font-size: 12px;
+	color: #74AD42;
+	margin-top: 10px;
+	font-family: monospace;
+	font-weight: bold;
+}
+
 /* Button */
 .button, .disabled {
 	position: absolute;
