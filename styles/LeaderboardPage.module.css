@@ -58,15 +58,14 @@
 /* Department Cards */
 .departmentCards {
   display: flex;
-  flex-direction: column;
-  gap: 15px;
+  gap: 20px;
   margin-bottom: 25px;
-  align-items: center;
+  justify-content: center;
 }
 
 .deptCard {
-  width: 100%;
-  max-width: 400px;
+  flex: 1;
+  max-width: 280px;
   background: linear-gradient(135deg, rgba(34, 139, 34, 0.08) 0%, rgba(0, 128, 0, 0.04) 100%);
   border: 2px solid rgba(34, 139, 34, 0.2);
   border-radius: 16px;
@@ -104,13 +103,13 @@
 }
 
 .deptCard:hover {
-  transform: translateY(-2px);
+  transform: translateY(-4px);
   box-shadow: 0 8px 25px rgba(34, 139, 34, 0.15);
   border-color: rgba(34, 139, 34, 0.4);
 }
 
 .deptCard:first-child:hover {
-  transform: scale(1.02) translateY(-2px);
+  transform: scale(1.02) translateY(-4px);
   box-shadow: 0 10px 30px rgba(34, 139, 34, 0.25);
 }
 
@@ -330,12 +329,12 @@
   }
   
   .departmentCards {
-    gap: 12px;
+    gap: 15px;
     margin-bottom: 20px;
   }
   
   .deptCard {
-    max-width: 350px;
+    max-width: none;
     padding: 20px 16px;
   }
   
@@ -344,7 +343,7 @@
   }
   
   .deptCard:first-child:hover {
-    transform: scale(1.01) translateY(-2px);
+    transform: scale(1.01) translateY(-4px);
   }
   
   .deptIcon {
@@ -395,7 +394,9 @@
 
 @media (max-width: 480px) {
   .departmentCards {
-    gap: 10px;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
   }
   
   .deptCard {
