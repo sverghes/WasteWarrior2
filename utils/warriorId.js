@@ -24,11 +24,14 @@ export const generateWarriorId = async (department) => {
     
     let nextNumber;
     if (counterDoc.exists()) {
+      // Get the current count before incrementing
+      const currentCount = counterDoc.data().count;
+      nextNumber = currentCount + 1;
+      
       // Increment the counter
       await updateDoc(counterRef, {
         count: increment(1)
       });
-      nextNumber = counterDoc.data().count + 1;
     } else {
       // Initialize counter if it doesn't exist
       nextNumber = 1001; // Start from 1001 to ensure 4-digit format
