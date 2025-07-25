@@ -58,14 +58,15 @@
 /* Department Cards */
 .departmentCards {
   display: flex;
-  gap: 20px;
+  flex-direction: column;
+  gap: 15px;
   margin-bottom: 25px;
-  justify-content: center;
+  align-items: center;
 }
 
 .deptCard {
-  flex: 1;
-  max-width: 280px;
+  width: 100%;
+  max-width: 400px;
   background: linear-gradient(135deg, rgba(34, 139, 34, 0.08) 0%, rgba(0, 128, 0, 0.04) 100%);
   border: 2px solid rgba(34, 139, 34, 0.2);
   border-radius: 16px;
@@ -85,10 +86,32 @@
   background: linear-gradient(135deg, rgba(0, 100, 0, 0.1) 0%, rgba(34, 139, 34, 0.05) 100%);
 }
 
+/* Highlight the leading department */
+.deptCard:first-child {
+  border-width: 3px;
+  box-shadow: 0 6px 20px rgba(34, 139, 34, 0.2);
+  transform: scale(1.02);
+}
+
+.deptCard:first-child[data-department="theatre"] {
+  border-color: rgba(34, 139, 34, 0.5);
+  background: linear-gradient(135deg, rgba(34, 139, 34, 0.15) 0%, rgba(0, 128, 0, 0.08) 100%);
+}
+
+.deptCard:first-child[data-department="pathology"] {
+  border-color: rgba(0, 100, 0, 0.5);
+  background: linear-gradient(135deg, rgba(0, 100, 0, 0.15) 0%, rgba(34, 139, 34, 0.08) 100%);
+}
+
 .deptCard:hover {
-  transform: translateY(-4px);
+  transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(34, 139, 34, 0.15);
   border-color: rgba(34, 139, 34, 0.4);
+}
+
+.deptCard:first-child:hover {
+  transform: scale(1.02) translateY(-2px);
+  box-shadow: 0 10px 30px rgba(34, 139, 34, 0.25);
 }
 
 .deptCard[data-department="pathology"]:hover {
@@ -332,13 +355,21 @@
   }
   
   .departmentCards {
-    gap: 15px;
+    gap: 12px;
     margin-bottom: 20px;
   }
   
   .deptCard {
-    max-width: none;
+    max-width: 350px;
     padding: 20px 16px;
+  }
+  
+  .deptCard:first-child {
+    transform: scale(1.01);
+  }
+  
+  .deptCard:first-child:hover {
+    transform: scale(1.01) translateY(-2px);
   }
   
   .deptIcon {
@@ -397,15 +428,21 @@
 
 @media (max-width: 480px) {
   .departmentCards {
-    flex-direction: column;
-    gap: 15px;
-    align-items: center;
+    gap: 10px;
   }
   
   .deptCard {
     width: 100%;
-    max-width: 300px;
+    max-width: 320px;
     padding: 18px 16px;
+  }
+  
+  .deptCard:first-child {
+    transform: scale(1.0);
+  }
+  
+  .deptCard:first-child:hover {
+    transform: scale(1.0) translateY(-2px);
   }
   
   .deptIcon {

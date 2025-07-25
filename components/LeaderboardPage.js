@@ -136,67 +136,87 @@ const LeaderboardPage = ({ onBack }) => {
 
       {/* Department Cards */}
       <div className={styles.departmentCards}>
-        <div className={styles.deptCard} data-department="theatre">
-          <div className={styles.deptHeader}>
-            <div className={styles.deptIcon}>🏥</div>
-            <div className={styles.deptTitle}>Theatre Department</div>
-            <div className={styles.deptRanking}>
-              {departmentStats.Theatre?.totalPoints > departmentStats.Pathology?.totalPoints ? "🏆 Leading" : 
-               departmentStats.Theatre?.totalPoints === departmentStats.Pathology?.totalPoints ? "🤝 Tied" : "🥈 Second"}
-            </div>
-          </div>
+        {(() => {
+          // Determine which department is leading
+          const theatrePoints = departmentStats.Theatre?.totalPoints || 0;
+          const pathologyPoints = departmentStats.Pathology?.totalPoints || 0;
           
-          <div className={styles.deptStats}>
-            <div className={styles.deptStatRow}>
-              <span className={styles.deptStatLabel}>Total Points</span>
-              <span className={styles.deptStatValue}>{departmentStats.Theatre?.totalPoints || 0}</span>
+          const theatreCard = (
+            <div key="theatre" className={styles.deptCard} data-department="theatre">
+              <div className={styles.deptHeader}>
+                <div className={styles.deptIcon}>🏥</div>
+                <div className={styles.deptTitle}>Theatre Department</div>
+                <div className={styles.deptRanking}>
+                  {theatrePoints > pathologyPoints ? "🏆 Leading" : 
+                   theatrePoints === pathologyPoints ? "🤝 Tied" : "🥈 Second"}
+                </div>
+              </div>
+              
+              <div className={styles.deptStats}>
+                <div className={styles.deptStatRow}>
+                  <span className={styles.deptStatLabel}>Total Points</span>
+                  <span className={styles.deptStatValue}>{theatrePoints}</span>
+                </div>
+                <div className={styles.deptStatRow}>
+                  <span className={styles.deptStatLabel}>Active Warriors</span>
+                  <span className={styles.deptStatValue}>{departmentStats.Theatre?.users || 0}</span>
+                </div>
+                <div className={styles.deptStatRow}>
+                  <span className={styles.deptStatLabel}>Average Points</span>
+                  <span className={styles.deptStatValue}>{departmentStats.Theatre?.avgPoints || 0}</span>
+                </div>
+              </div>
+              
+              <div className={styles.deptTopPerformer}>
+                <div className={styles.topPerformerLabel}>🌟 Top Performer</div>
+                <div className={styles.topPerformerInfo}>{getDepartmentRank("Theatre")}</div>
+              </div>
             </div>
-            <div className={styles.deptStatRow}>
-              <span className={styles.deptStatLabel}>Active Warriors</span>
-              <span className={styles.deptStatValue}>{departmentStats.Theatre?.users || 0}</span>
-            </div>
-            <div className={styles.deptStatRow}>
-              <span className={styles.deptStatLabel}>Average Points</span>
-              <span className={styles.deptStatValue}>{departmentStats.Theatre?.avgPoints || 0}</span>
-            </div>
-          </div>
-          
-          <div className={styles.deptTopPerformer}>
-            <div className={styles.topPerformerLabel}>🌟 Top Performer</div>
-            <div className={styles.topPerformerInfo}>{getDepartmentRank("Theatre")}</div>
-          </div>
-        </div>
+          );
 
-        <div className={styles.deptCard} data-department="pathology">
-          <div className={styles.deptHeader}>
-            <div className={styles.deptIcon}>🔬</div>
-            <div className={styles.deptTitle}>Pathology Department</div>
-            <div className={styles.deptRanking}>
-              {departmentStats.Pathology?.totalPoints > departmentStats.Theatre?.totalPoints ? "🏆 Leading" : 
-               departmentStats.Pathology?.totalPoints === departmentStats.Theatre?.totalPoints ? "🤝 Tied" : "🥈 Second"}
+          const pathologyCard = (
+            <div key="pathology" className={styles.deptCard} data-department="pathology">
+              <div className={styles.deptHeader}>
+                <div className={styles.deptIcon}>🔬</div>
+                <div className={styles.deptTitle}>Pathology Department</div>
+                <div className={styles.deptRanking}>
+                  {pathologyPoints > theatrePoints ? "🏆 Leading" : 
+                   pathologyPoints === theatrePoints ? "🤝 Tied" : "🥈 Second"}
+                </div>
+              </div>
+              
+              <div className={styles.deptStats}>
+                <div className={styles.deptStatRow}>
+                  <span className={styles.deptStatLabel}>Total Points</span>
+                  <span className={styles.deptStatValue}>{pathologyPoints}</span>
+                </div>
+                <div className={styles.deptStatRow}>
+                  <span className={styles.deptStatLabel}>Active Warriors</span>
+                  <span className={styles.deptStatValue}>{departmentStats.Pathology?.users || 0}</span>
+                </div>
+                <div className={styles.deptStatRow}>
+                  <span className={styles.deptStatLabel}>Average Points</span>
+                  <span className={styles.deptStatValue}>{departmentStats.Pathology?.avgPoints || 0}</span>
+                </div>
+              </div>
+              
+              <div className={styles.deptTopPerformer}>
+                <div className={styles.topPerformerLabel}>🌟 Top Performer</div>
+                <div className={styles.topPerformerInfo}>{getDepartmentRank("Pathology")}</div>
+              </div>
             </div>
-          </div>
-          
-          <div className={styles.deptStats}>
-            <div className={styles.deptStatRow}>
-              <span className={styles.deptStatLabel}>Total Points</span>
-              <span className={styles.deptStatValue}>{departmentStats.Pathology?.totalPoints || 0}</span>
-            </div>
-            <div className={styles.deptStatRow}>
-              <span className={styles.deptStatLabel}>Active Warriors</span>
-              <span className={styles.deptStatValue}>{departmentStats.Pathology?.users || 0}</span>
-            </div>
-            <div className={styles.deptStatRow}>
-              <span className={styles.deptStatLabel}>Average Points</span>
-              <span className={styles.deptStatValue}>{departmentStats.Pathology?.avgPoints || 0}</span>
-            </div>
-          </div>
-          
-          <div className={styles.deptTopPerformer}>
-            <div className={styles.topPerformerLabel}>🌟 Top Performer</div>
-            <div className={styles.topPerformerInfo}>{getDepartmentRank("Pathology")}</div>
-          </div>
-        </div>
+          );
+
+          // Return cards in order based on who's leading
+          if (theatrePoints > pathologyPoints) {
+            return [theatreCard, pathologyCard];
+          } else if (pathologyPoints > theatrePoints) {
+            return [pathologyCard, theatreCard];
+          } else {
+            // If tied, maintain Theatre first (or you could randomize)
+            return [theatreCard, pathologyCard];
+          }
+        })()}
       </div>
 
       {/* Filter Tabs - Compact */}
