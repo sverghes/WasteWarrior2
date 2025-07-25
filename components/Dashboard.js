@@ -122,16 +122,33 @@ const Dashboard = (props) => {
           <div className={styles.statLabel}>
             {badgeIds.muffin.length > 0 || badgeIds.coffee.length > 0 ? (
               <div className={styles.badgeIdDisplay}>
-                {badgeIds.muffin.length > 0 && (
-                  <span className={styles.badgeId}>
-                    {badgeIds.muffin[badgeIds.muffin.length - 1]}
-                  </span>
-                )}
-                {badgeIds.coffee.length > 0 && (
-                  <span className={styles.badgeId}>
-                    {badgeIds.coffee[badgeIds.coffee.length - 1]}
-                  </span>
-                )}
+                {(() => {
+                  // Determine the most recent badge based on current streak
+                  const latestMuffin = badgeIds.muffin.length > 0 ? badgeIds.muffin[badgeIds.muffin.length - 1] : null;
+                  const latestCoffee = badgeIds.coffee.length > 0 ? badgeIds.coffee[badgeIds.coffee.length - 1] : null;
+                  
+                  // If current streak is divisible by 3, the most recent badge is coffee
+                  // Otherwise, the most recent badge is muffin
+                  if (streak > 0 && streak % 3 === 0 && latestCoffee) {
+                    return (
+                      <span className={styles.badgeId}>
+                        {latestCoffee}
+                      </span>
+                    );
+                  } else if (latestMuffin) {
+                    return (
+                      <span className={styles.badgeId}>
+                        {latestMuffin}
+                      </span>
+                    );
+                  } else if (latestCoffee) {
+                    return (
+                      <span className={styles.badgeId}>
+                        {latestCoffee}
+                      </span>
+                    );
+                  }
+                })()}
               </div>
             ) : (
               "Badges"
