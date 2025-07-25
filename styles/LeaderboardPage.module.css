@@ -55,146 +55,131 @@
   font-family: "Mattone", sans-serif;
 }
 
-/* Department Leaf Cards */
-.departmentLeaves {
+/* Department Cards */
+.departmentCards {
   display: flex;
-  justify-content: center;
-  gap: 30px;
+  gap: 20px;
   margin-bottom: 25px;
-  flex-wrap: wrap;
+  justify-content: center;
 }
 
-.leafCard {
+.deptCard {
+  flex: 1;
+  max-width: 280px;
+  background: linear-gradient(135deg, rgba(34, 139, 34, 0.08) 0%, rgba(0, 128, 0, 0.04) 100%);
+  border: 2px solid rgba(34, 139, 34, 0.2);
+  border-radius: 16px;
+  padding: 24px 20px;
+  transition: all 0.3s ease;
   position: relative;
-  padding: 25px 20px;
-  min-height: 200px;
-  width: 180px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  transition: all 0.4s ease;
-  cursor: pointer;
+  overflow: hidden;
 }
 
-/* Theatre Department Leaf (left-leaning) */
-.leafCard[data-department="theatre"] {
-  background: linear-gradient(135deg, rgba(34, 139, 34, 0.15) 0%, rgba(0, 128, 0, 0.08) 100%);
-  border: 3px solid rgba(34, 139, 34, 0.4);
-  border-radius: 50% 0 50% 50%;
-  transform: rotate(-15deg);
-  box-shadow: 0 4px 12px rgba(34, 139, 34, 0.3);
+.deptCard[data-department="theatre"] {
+  border-color: rgba(34, 139, 34, 0.3);
+  background: linear-gradient(135deg, rgba(34, 139, 34, 0.1) 0%, rgba(0, 128, 0, 0.05) 100%);
 }
 
-/* Pathology Department Leaf (right-leaning) */
-.leafCard[data-department="pathology"] {
-  background: linear-gradient(135deg, rgba(0, 100, 0, 0.15) 0%, rgba(34, 139, 34, 0.08) 100%);
-  border: 3px solid rgba(0, 100, 0, 0.4);
-  border-radius: 0 50% 50% 50%;
-  transform: rotate(15deg);
-  box-shadow: 0 4px 12px rgba(0, 100, 0, 0.3);
+.deptCard[data-department="pathology"] {
+  border-color: rgba(0, 100, 0, 0.3);
+  background: linear-gradient(135deg, rgba(0, 100, 0, 0.1) 0%, rgba(34, 139, 34, 0.05) 100%);
 }
 
-.leafCard:hover {
-  transform: rotate(-15deg) translateY(-5px) scale(1.05);
-  box-shadow: 0 8px 20px rgba(34, 139, 34, 0.4);
+.deptCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(34, 139, 34, 0.15);
+  border-color: rgba(34, 139, 34, 0.4);
 }
 
-.leafCard[data-department="pathology"]:hover {
-  transform: rotate(15deg) translateY(-5px) scale(1.05);
-  box-shadow: 0 8px 20px rgba(0, 100, 0, 0.4);
+.deptCard[data-department="pathology"]:hover {
+  border-color: rgba(0, 100, 0, 0.4);
+  box-shadow: 0 8px 25px rgba(0, 100, 0, 0.15);
 }
 
-/* Leaf vein effect */
-.leafCard::before {
-  content: '';
-  position: absolute;
-  top: 15%;
-  left: 50%;
-  width: 2px;
-  height: 70%;
-  background: linear-gradient(to bottom, transparent 0%, rgba(34, 139, 34, 0.4) 50%, transparent 100%);
-  transform: translateX(-50%);
-  z-index: 1;
-}
-
-.leafHeader {
+/* Department Header */
+.deptHeader {
   text-align: center;
-  position: relative;
-  z-index: 2;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid rgba(34, 139, 34, 0.2);
 }
 
-.leafIcon {
-  font-size: 28px;
+.deptIcon {
+  font-size: 32px;
   margin-bottom: 8px;
+  display: block;
 }
 
-.leafTitle {
+.deptTitle {
   font-size: 18px;
   font-weight: bold;
   color: #2F4F2F;
-  margin-bottom: 5px;
+  margin-bottom: 6px;
+  line-height: 1.2;
 }
 
-.leafRank {
-  font-size: 20px;
-}
-
-.leafStats {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  position: relative;
-  z-index: 2;
-  text-align: center;
-  margin-bottom: 15px;
-}
-
-.leafStatItem {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.leafStatValue {
-  font-weight: bold;
-  font-size: 16px;
+.deptRanking {
+  font-size: 14px;
+  font-weight: 600;
   color: #228B22;
-  line-height: 1;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 4px 12px;
+  border-radius: 12px;
+  display: inline-block;
 }
 
-.leafStatLabel {
-  font-size: 10px;
+/* Department Stats */
+.deptStats {
+  margin-bottom: 20px;
+}
+
+.deptStatRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(34, 139, 34, 0.1);
+}
+
+.deptStatRow:last-child {
+  border-bottom: none;
+}
+
+.deptStatLabel {
+  font-size: 13px;
   color: #556B2F;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-top: 2px;
+  font-weight: 500;
 }
 
-.leafTopPerformer {
+.deptStatValue {
+  font-size: 16px;
+  font-weight: bold;
+  color: #228B22;
+}
+
+/* Top Performer Section */
+.deptTopPerformer {
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 12px;
+  padding: 12px;
   text-align: center;
-  position: relative;
-  z-index: 2;
-  background: rgba(255, 255, 255, 0.9);
-  padding: 8px;
-  border-radius: 8px;
   border: 1px solid rgba(34, 139, 34, 0.2);
 }
 
 .topPerformerLabel {
-  font-size: 9px;
+  font-size: 11px;
   color: #556B2F;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  margin-bottom: 3px;
+  margin-bottom: 5px;
+  font-weight: 600;
 }
 
-.topPerformerName {
-  font-size: 11px;
-  font-weight: 600;
+.topPerformerInfo {
+  font-size: 12px;
   color: #2F4F2F;
-  line-height: 1.2;
+  font-weight: 600;
+  line-height: 1.3;
 }
 
 /* Compact Filter Tabs */
@@ -346,39 +331,43 @@
     font-size: 20px;
   }
   
-  .departmentLeaves {
-    gap: 20px;
+  .departmentCards {
+    gap: 15px;
     margin-bottom: 20px;
   }
   
-  .leafCard {
-    width: 150px;
-    min-height: 170px;
-    padding: 20px 15px;
+  .deptCard {
+    max-width: none;
+    padding: 20px 16px;
   }
   
-  .leafIcon {
-    font-size: 24px;
+  .deptIcon {
+    font-size: 28px;
   }
   
-  .leafTitle {
+  .deptTitle {
     font-size: 16px;
   }
   
-  .leafRank {
-    font-size: 18px;
+  .deptRanking {
+    font-size: 12px;
+    padding: 3px 10px;
   }
   
-  .leafStatValue {
+  .deptStatLabel {
+    font-size: 12px;
+  }
+  
+  .deptStatValue {
     font-size: 14px;
   }
   
-  .leafStatLabel {
-    font-size: 9px;
+  .topPerformerLabel {
+    font-size: 10px;
   }
   
-  .topPerformerName {
-    font-size: 10px;
+  .topPerformerInfo {
+    font-size: 11px;
   }
   
   .compactTab {
@@ -407,31 +396,48 @@
 }
 
 @media (max-width: 480px) {
-  .departmentLeaves {
+  .departmentCards {
     flex-direction: column;
+    gap: 15px;
     align-items: center;
-    gap: 25px;
   }
   
-  .leafCard {
-    width: 160px;
-    min-height: 180px;
+  .deptCard {
+    width: 100%;
+    max-width: 300px;
+    padding: 18px 16px;
   }
   
-  .leafCard[data-department="theatre"] {
-    transform: rotate(-10deg);
+  .deptIcon {
+    font-size: 26px;
   }
   
-  .leafCard[data-department="pathology"] {
-    transform: rotate(10deg);
+  .deptTitle {
+    font-size: 15px;
   }
   
-  .leafCard:hover {
-    transform: rotate(-10deg) translateY(-5px) scale(1.05);
+  .deptRanking {
+    font-size: 11px;
   }
   
-  .leafCard[data-department="pathology"]:hover {
-    transform: rotate(10deg) translateY(-5px) scale(1.05);
+  .deptStatRow {
+    padding: 6px 0;
+  }
+  
+  .deptStatLabel {
+    font-size: 11px;
+  }
+  
+  .deptStatValue {
+    font-size: 13px;
+  }
+  
+  .deptTopPerformer {
+    padding: 10px;
+  }
+  
+  .topPerformerInfo {
+    font-size: 10px;
   }
   
   .compactTabs {
