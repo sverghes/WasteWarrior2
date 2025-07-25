@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../firebase/firebaseConfig";
 import { collection, query, orderBy, limit, onSnapshot, doc, setDoc, getDoc } from "firebase/firestore";
+import { getUserWarriorId, formatWarriorName } from "../utils/warriorId";
 import styles from "../styles/Leaderboard.module.css";
 
 const Leaderboard = ({ userPoints, userStreak, userBadges, department }) => {
@@ -10,14 +11,16 @@ const Leaderboard = ({ userPoints, userStreak, userBadges, department }) => {
   const [userId, setUserId] = useState(null);
 
   useEffect(() => {
-    // Generate or retrieve anonymous user ID
-    let storedUserId = localStorage.getItem("userId");
-    if (!storedUserId) {
-      storedUserId = "user_" + Math.random().toString(36).substr(2, 9) + "_" + Date.now();
-      localStorage.setItem("userId", storedUserId);
+    // Generate or retrieve warrior ID
+    const initializeWarriorId = async () => {
+      const warriorId = await getUserWarriorId(department);
+      setUserId(warriorId);
+    };
+    
+    if (department) {
+      initializeWarriorId();
     }
-    setUserId(storedUserId);
-  }, []);
+  }, [department]);
 
   useEffect(() => {
     if (!userId) return;
@@ -31,11 +34,11 @@ const Leaderboard = ({ userPoints, userStreak, userBadges, department }) => {
         }
         
         const userRef = doc(db, "leaderboard", userId);
-        const anonymousName = `${department} Warrior ${userId.slice(-4)}`;
+        const warriorName = formatWarriorName(userId, department);
         
         await setDoc(userRef, {
           userId: userId,
-          name: anonymousName,
+          name: warriorName,
           points: userPoints,
           streak: userStreak,
           badges: userBadges.length,

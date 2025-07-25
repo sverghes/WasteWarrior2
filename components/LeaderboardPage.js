@@ -149,7 +149,7 @@ const LeaderboardPage = ({ onBack }) => {
                 <div className={styles.deptCard} data-department="theatre">
                   <div className={styles.deptHeader}>
                     <div className={styles.deptIcon}>🏥</div>
-                    <div className={styles.deptTitle}>Theatre Department</div>
+                    <div className={styles.deptTitle}>Theatre</div>
                     <div className={styles.deptRanking}>
                       {theatrePoints > pathologyPoints ? "🏆 Leading" : "🤝 Tied"}
                     </div>
@@ -174,7 +174,7 @@ const LeaderboardPage = ({ onBack }) => {
                 <div className={styles.deptCard} data-department="pathology">
                   <div className={styles.deptHeader}>
                     <div className={styles.deptIcon}>🔬</div>
-                    <div className={styles.deptTitle}>Pathology Department</div>
+                    <div className={styles.deptTitle}>Pathology</div>
                     <div className={styles.deptRanking}>
                       {pathologyPoints > theatrePoints ? "🏆 Leading" : 
                        pathologyPoints === theatrePoints ? "🤝 Tied" : "🥈 Second"}
@@ -205,7 +205,7 @@ const LeaderboardPage = ({ onBack }) => {
                 <div className={styles.deptCard} data-department="pathology">
                   <div className={styles.deptHeader}>
                     <div className={styles.deptIcon}>🔬</div>
-                    <div className={styles.deptTitle}>Pathology Department</div>
+                    <div className={styles.deptTitle}>Pathology</div>
                     <div className={styles.deptRanking}>🏆 Leading</div>
                   </div>
                   
@@ -228,7 +228,7 @@ const LeaderboardPage = ({ onBack }) => {
                 <div className={styles.deptCard} data-department="theatre">
                   <div className={styles.deptHeader}>
                     <div className={styles.deptIcon}>🏥</div>
-                    <div className={styles.deptTitle}>Theatre Department</div>
+                    <div className={styles.deptTitle}>Theatre</div>
                     <div className={styles.deptRanking}>🥈 Second</div>
                   </div>
                   

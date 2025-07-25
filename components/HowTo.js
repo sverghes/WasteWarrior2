@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styles from "./../styles/HowTo.module.css";
 import { db } from "../firebase/firebaseConfig";
 import { doc, setDoc } from "firebase/firestore";
+import { getUserWarriorId, formatWarriorName } from "../utils/warriorId";
 
 const HowTo = (props) => {
   const [searchField, setSearchField] = useState("");
@@ -120,22 +121,16 @@ const HowTo = (props) => {
         return;
       }
 
-      // Generate or get user ID
-      let userId = localStorage.getItem("userId");
-      if (!userId) {
-        userId = "user_" + Math.random().toString(36).substr(2, 9);
-        localStorage.setItem("userId", userId);
-      }
-
-      // Get department
+      // Get or generate warrior ID
       const department = localStorage.getItem("department") || "Theatre";
+      const userId = await getUserWarriorId(department);
       
       const userRef = doc(db, "leaderboard", userId);
-      const anonymousName = `${department} Warrior ${userId.slice(-4)}`;
+      const warriorName = formatWarriorName(userId, department);
       
       await setDoc(userRef, {
         userId: userId,
-        name: anonymousName,
+        name: warriorName,
         points: points,
         streak: streak,
         badges: badges,

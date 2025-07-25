@@ -54,12 +54,19 @@ service cloud.firestore {
       // Allow users to read all leaderboard data (for rankings)
       allow read: if true;
       
-      // Allow users to write only to their own document
-      // and only with valid data structure
+      // Allow users to write only with valid warrior ID format and data structure
       allow write: if userId is string 
         && userId.size() > 0
         && request.auth == null // Anonymous access allowed
+        && (userId.matches('TW[0-9]{4}') || userId.matches('PW[0-9]{4}'))
         && validateLeaderboardData(resource, request.resource);
+    }
+    
+    // Rules for warrior ID counters
+    match /counters/{department} {
+      allow read: if true;
+      allow write: if department in ['theatreWarriors', 'pathologyWarriors']
+        && request.auth == null;
     }
   }
 }
@@ -77,6 +84,7 @@ function validateLeaderboardData(existingData, newData) {
     && newData.data.badges >= 0
     && newData.data.department in ['Theatre', 'Pathology']
     && newData.data.lastUpdated is string;
+}
 }
 ```
 
@@ -96,7 +104,8 @@ service cloud.firestore {
 ## Features Enabled
 - ✅ Real-time leaderboard updates
 - ✅ Cross-department competition
-- ✅ Anonymous user tracking
+- ✅ Structured warrior IDs (TW#### for Theatre, PW#### for Pathology)
+- ✅ Sequential ID generation with Firebase counters
 - ✅ Points and streak synchronization
 - ✅ Top 3 podium rankings
 - ✅ Department-specific identification
@@ -105,11 +114,12 @@ service cloud.firestore {
 The app works offline and will sync leaderboard data when connectivity is restored. Users can continue earning points locally even without internet access.
 
 ## Privacy & Security
-- Users are identified by anonymous IDs like "Theatre Warrior 1234"
+- Users are identified by structured warrior IDs like "TW1001" (Theatre Warrior) or "PW1001" (Pathology Warrior)
+- Sequential ID generation ensures unique identification while maintaining anonymity
 - No personal information is stored
 - Department selection is the only identifying information
 - Production-ready Firestore security rules implemented
-- Data validation ensures only proper leaderboard entries
+- Data validation ensures only proper leaderboard entries and warrior ID formats
 - Anonymous access controlled and monitored
 
 ## Production Deployment
