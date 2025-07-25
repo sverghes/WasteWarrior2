@@ -18,6 +18,23 @@ const Splash = (props) => {
 	const [reset, setReset] = useState(false);
 	const [on, setOn] = useState(false);
 	const [leaderboard, setLeaderboard] = useState(false);
+	const [isExistingUser, setIsExistingUser] = useState(false);
+
+	// Check if user already has a WarriorID on component mount
+	useEffect(() => {
+		if (typeof window !== "undefined") {
+			const existingWarriorId = localStorage.getItem("warriorId");
+			const existingDepartment = localStorage.getItem("department");
+			
+			if (existingWarriorId && existingDepartment) {
+				// Existing user with WarriorID - skip department selection
+				setIsExistingUser(true);
+				setGetStarted(true);
+				setDone(true);
+				setDone2(true);
+			}
+		}
+	}, []);
 
 	useEffect(() => {
 		// Only set done to true if user has clicked "Get started" AND region is set
@@ -89,10 +106,20 @@ const Splash = (props) => {
 			{reset &&
 				<RegionSelect handleRegion={handleRegion} region={props.region} />
 			}
-			{getStarted && !done &&
+			{getStarted && !done && !isExistingUser &&
 				<DepartmentSelector onDepartmentSelect={handleDepartmentSelect} />
 			}
-			{!getStarted &&
+			{isExistingUser && (!done || !done2) &&
+				<div className={styles.splash}>
+					<div className={styles.logo}>
+						<img src="logo.svg"/>
+						WasteWarrior
+					</div>
+					<div className={styles.title}>Welcome back, Warrior!</div>
+					<div className={styles.subtitle}>Loading your dashboard...</div>
+				</div>
+			}
+			{!getStarted && !isExistingUser &&
 			<div className={styles.splash}>
 				<div className={styles.logo}>
 					<img src="logo.svg"/>

@@ -15,15 +15,39 @@ export default function Home() {
   // Saved preferences
   useEffect(() => {
     if (typeof window !== "undefined") {
-      localStorage.removeItem("region");
-      localStorage.removeItem("onboarding");
+      // Only clear localStorage in development/debug mode
+      // localStorage.removeItem("region");
+      // localStorage.removeItem("onboarding");
 
-      if (localStorage.getItem("region") != null) {
-        setRegion(parseInt(localStorage.getItem("region")));
+      // Check if user already has a WarriorID and department
+      const existingWarriorId = localStorage.getItem("warriorId");
+      const existingDepartment = localStorage.getItem("department");
+      
+      if (existingWarriorId && existingDepartment) {
+        // User already has a WarriorID - set region and onboarding as completed
+        let regionNumber;
+        if (existingDepartment === "Theatre") {
+          regionNumber = 1;
+        } else if (existingDepartment === "Pathology") {
+          regionNumber = 2;
+        } else {
+          regionNumber = 3;
+        }
+        
+        setRegion(regionNumber);
+        localStorage.setItem("region", regionNumber);
+        setOnboarding(true);
+        localStorage.setItem("onboarding", true);
+      } else {
+        // New user - load from localStorage if available
+        if (localStorage.getItem("region") != null) {
+          setRegion(parseInt(localStorage.getItem("region")));
+        }
+        if (localStorage.getItem("onboarding") != null) {
+          setOnboarding(localStorage.getItem("onboarding"));
+        }
       }
-      if (localStorage.getItem("onboarding") != null) {
-        setOnboarding(localStorage.getItem("onboarding"));
-      }
+      
       if (localStorage.getItem("num") != null) {
         setNum(parseInt(localStorage.getItem("num")));
       }
