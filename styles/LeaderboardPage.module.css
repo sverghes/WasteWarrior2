@@ -1,9 +1,17 @@
 .leaderboardPage {
   background: #FFFFFF;
   min-height: 100vh;
+  height: 100vh;
   color: #61AF2B;
   padding: 20px;
   overflow-y: auto;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  width: 100vw;
 }
 
 .header {
@@ -179,10 +187,11 @@
 
 /* Leaderboard List */
 .leaderboardList {
-  max-height: 500px;
+  max-height: calc(100vh - 400px);
   overflow-y: auto;
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+  scrollbar-color: rgba(97, 175, 43, 0.4) transparent;
+  margin-bottom: 20px;
 }
 
 .leaderboardList::-webkit-scrollbar {
@@ -261,6 +270,8 @@
 @media (max-width: 768px) {
   .leaderboardPage {
     padding: 15px;
+    width: 100vw;
+    max-width: none;
   }
   
   .header h1 {
