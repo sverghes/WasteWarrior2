@@ -54,25 +54,34 @@ export const generateWarriorId = async (department) => {
 /**
  * Gets or creates a warrior ID for the current user
  * @param {string} department - "Theatre" or "Pathology"
+ * @param {boolean} forceMigration - Force migration of old IDs (optional)
  * @returns {Promise<string>} - User's warrior ID
  */
-export const getUserWarriorId = async (department) => {
+export const getUserWarriorId = async (department, forceMigration = true) => {
   // Check if user already has a warrior ID
   let storedUserId = localStorage.getItem("warriorId");
+  const storedDepartment = localStorage.getItem("department");
+  const migrationFlag = localStorage.getItem("warriorIdMigrated");
   
-  if (!storedUserId) {
-    // Generate new warrior ID
+  // Check if we need to migrate old format or generate new ID
+  const hasOldFormat = storedUserId && !storedUserId.match(/^(TW|PW)\d{4}$/);
+  const departmentChanged = storedDepartment !== department;
+  const needsMigration = forceMigration && !migrationFlag && hasOldFormat;
+  
+  const needsNewId = !storedUserId || needsMigration || departmentChanged;
+  
+  if (needsNewId) {
+    // Generate new warrior ID (migration or new user)
     storedUserId = await generateWarriorId(department);
     localStorage.setItem("warriorId", storedUserId);
     localStorage.setItem("department", department);
-  } else {
-    // Check if stored ID matches current department
-    const storedDepartment = localStorage.getItem("department");
-    if (storedDepartment !== department) {
-      // Department changed, generate new ID
-      storedUserId = await generateWarriorId(department);
-      localStorage.setItem("warriorId", storedUserId);
-      localStorage.setItem("department", department);
+    localStorage.setItem("warriorIdMigrated", "true");
+    
+    // If this was a migration, log it
+    if (needsMigration) {
+      console.log("Migrated user to new warrior ID format:", storedUserId);
+      // Optionally clean up old userId
+      localStorage.removeItem("userId");
     }
   }
   
