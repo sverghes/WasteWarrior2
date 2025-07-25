@@ -2,11 +2,14 @@ import React, { useEffect, useState } from "react";
 import styles from "./../styles/Dashboard.module.css";
 import HowTo from "./HowTo";
 import DepartmentSelector from "./DepartmentSelector";
+import { calculateBadges, getBadgeDisplay } from "../utils/badges";
+import { awardBadges, getBadgeIdSummary } from "../utils/badgeCounters";
 
 const Dashboard = (props) => {
   const [points, setPoints] = useState(0);
   const [streak, setStreak] = useState(0);
   const [badges, setBadges] = useState([]);
+  const [badgeIds, setBadgeIds] = useState([]);
   const [dailyProgress, setDailyProgress] = useState(0);
   const [isOnCooldown, setIsOnCooldown] = useState(false);
   const [department, setDepartment] = useState("");
@@ -23,6 +26,9 @@ const Dashboard = (props) => {
       }
       if (localStorage.getItem("badges") != null) {
         setBadges(JSON.parse(localStorage.getItem("badges")));
+      }
+      if (localStorage.getItem("badgeIds") != null) {
+        setBadgeIds(JSON.parse(localStorage.getItem("badgeIds")));
       }
       
       // Load department preference
@@ -47,6 +53,10 @@ const Dashboard = (props) => {
     }
   }, []);
 
+  // Calculate current badges based on streak
+  const currentBadges = calculateBadges(streak);
+  const badgeDisplay = getBadgeDisplay(currentBadges.muffin, currentBadges.coffee);
+
   const handlePointsUpdate = (newPoints) => {
     setPoints(newPoints);
     
@@ -62,10 +72,23 @@ const Dashboard = (props) => {
       setIsOnCooldown(now < endTime);
     }
     
-    // Update streak if it changed
+    // Update streak if it changed and award new badges
     const currentStreak = parseInt(localStorage.getItem("streak") || "0");
     if (currentStreak !== streak) {
       setStreak(currentStreak);
+      updateBadgeIds(currentStreak);
+    }
+  };
+
+  const updateBadgeIds = async (newStreak) => {
+    try {
+      const badgeResult = await awardBadges(newStreak, badgeIds);
+      if (badgeResult.newBadgesAwarded > 0) {
+        setBadgeIds(badgeResult.badgeIds);
+        localStorage.setItem("badgeIds", JSON.stringify(badgeResult.badgeIds));
+      }
+    } catch (error) {
+      console.log("Error updating badge IDs:", error);
     }
   };
 
@@ -91,8 +114,39 @@ const Dashboard = (props) => {
           <div className={styles.statLabel}>Streak</div>
         </div>
         <div className={styles.statCard}>
-          <div className={styles.statValue}>{badges.length}</div>
-          <div className={styles.statLabel}>Badges</div>
+          <div className={styles.statValue}>{currentBadges.total}</div>
+          <div className={styles.statLabel}>
+            {badgeIds.muffin.length > 0 || badgeIds.coffee.length > 0 ? (
+              <div className={styles.badgeIdDisplay}>
+                {badgeIds.muffin.length > 0 && (
+                  <span className={styles.badgeId}>
+                    {badgeIds.muffin[badgeIds.muffin.length - 1]}
+                  </span>
+                )}
+                {badgeIds.coffee.length > 0 && (
+                  <span className={styles.badgeId}>
+                    {badgeIds.coffee[badgeIds.coffee.length - 1]}
+                  </span>
+                )}
+              </div>
+            ) : (
+              "Badges"
+            )}
+          </div>
+          <div className={styles.badgeDisplay}>
+            {badgeDisplay.slice(0, 6).map((badge, index) => (
+              <img 
+                key={index} 
+                src={badge.image} 
+                alt={badge.alt} 
+                title={badge.title}
+                className={styles.badgeIcon}
+              />
+            ))}
+            {badgeDisplay.length > 6 && (
+              <span className={styles.badgeMore}>+{badgeDisplay.length - 6}</span>
+            )}
+          </div>
         </div>
       </div>
       <div className={styles.nav}>
