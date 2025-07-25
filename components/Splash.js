@@ -74,7 +74,7 @@ const Splash = (props) => {
 			{leaderboard &&
 				<LeaderboardPage onBack={() => setLeaderboard(false)} />
 			}
-			{settings && !reset && !on &&
+			{settings && !reset && !on && !leaderboard &&
 				<Settings setSettings={setSettings} setReset={setReset} setOn={setOn} setLeaderboard={setLeaderboard} />
 			}
 			{done && done2 && !view && !settings && !leaderboard &&
