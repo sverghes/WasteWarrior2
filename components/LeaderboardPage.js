@@ -131,104 +131,84 @@ const LeaderboardPage = ({ onBack }) => {
         <button className={styles.backButton} onClick={onBack}>
           <img src="arrow-back.svg" alt="Back" />
         </button>
-        <h1>🏆 Healthcare Heroes Leaderboard</h1>
-        <p>Competition across Theatre and Pathology departments</p>
+        <h1>🏆 Leaderboard</h1>
       </div>
 
-      {/* Department Statistics */}
-      <div className={styles.departmentStats}>
-        <h2>📊 Department Performance</h2>
-        <div className={styles.statsGrid}>
-          <div className={styles.statCard}>
-            <div className={styles.statIcon}>🏥</div>
-            <div className={styles.statInfo}>
-              <h3>Theatre Department</h3>
-              <div className={styles.statNumbers}>
-                <span className={styles.totalPoints}>{departmentStats.Theatre?.totalPoints || 0} total points</span>
-                <span className={styles.userCount}>{departmentStats.Theatre?.users || 0} active warriors</span>
-                <span className={styles.avgPoints}>{departmentStats.Theatre?.avgPoints || 0} avg points</span>
-                <span className={styles.topRank}>Top performer: {getDepartmentRank("Theatre")}</span>
+      {/* Compact Department Overview */}
+      <div className={styles.compactOverview}>
+        <div className={styles.overviewCard}>
+          <div className={styles.overviewHeader}>
+            <h3>Department Competition</h3>
+            <div className={styles.totalWarriors}>{leaderboard.length} Warriors</div>
+          </div>
+          <div className={styles.departmentComparison}>
+            <div className={styles.deptCard}>
+              <span className={styles.deptIcon}>🏥</span>
+              <div className={styles.deptInfo}>
+                <div className={styles.deptName}>Theatre</div>
+                <div className={styles.deptPoints}>{departmentStats.Theatre?.totalPoints || 0}pts</div>
               </div>
             </div>
-          </div>
-          
-          <div className={styles.statCard}>
-            <div className={styles.statIcon}>🔬</div>
-            <div className={styles.statInfo}>
-              <h3>Pathology Department</h3>
-              <div className={styles.statNumbers}>
-                <span className={styles.totalPoints}>{departmentStats.Pathology?.totalPoints || 0} total points</span>
-                <span className={styles.userCount}>{departmentStats.Pathology?.users || 0} active warriors</span>
-                <span className={styles.avgPoints}>{departmentStats.Pathology?.avgPoints || 0} avg points</span>
-                <span className={styles.topRank}>Top performer: {getDepartmentRank("Pathology")}</span>
+            <div className={styles.vsIndicator}>VS</div>
+            <div className={styles.deptCard}>
+              <span className={styles.deptIcon}>🔬</span>
+              <div className={styles.deptInfo}>
+                <div className={styles.deptName}>Pathology</div>
+                <div className={styles.deptPoints}>{departmentStats.Pathology?.totalPoints || 0}pts</div>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Department Winner */}
-      {departmentStats.Theatre && departmentStats.Pathology && (
-        <div className={styles.departmentWinner}>
-          <h3>🏆 Leading Department</h3>
-          <div className={styles.winner}>
-            {departmentStats.Theatre.totalPoints > departmentStats.Pathology.totalPoints ? (
-              <div className={styles.winnerCard}>
-                <span className={styles.winnerIcon}>🏥</span>
-                <span className={styles.winnerText}>Theatre Department leads with {departmentStats.Theatre.totalPoints} points!</span>
-              </div>
-            ) : departmentStats.Pathology.totalPoints > departmentStats.Theatre.totalPoints ? (
-              <div className={styles.winnerCard}>
-                <span className={styles.winnerIcon}>🔬</span>
-                <span className={styles.winnerText}>Pathology Department leads with {departmentStats.Pathology.totalPoints} points!</span>
-              </div>
-            ) : (
-              <div className={styles.winnerCard}>
-                <span className={styles.winnerIcon}>🤝</span>
-                <span className={styles.winnerText}>It's a tie! Both departments are equally committed to safety!</span>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* Filter Tabs */}
-      <div className={styles.filterTabs}>
+      {/* Filter Tabs - Compact */}
+      <div className={styles.compactTabs}>
         <button 
-          className={`${styles.tab} ${activeTab === "all" ? styles.activeTab : ""}`}
+          className={`${styles.compactTab} ${activeTab === "all" ? styles.activeCompactTab : ""}`}
           onClick={() => setActiveTab("all")}
         >
-          All Warriors ({leaderboard.length})
+          All ({leaderboard.length})
         </button>
         <button 
-          className={`${styles.tab} ${activeTab === "Theatre" ? styles.activeTab : ""}`}
+          className={`${styles.compactTab} ${activeTab === "Theatre" ? styles.activeCompactTab : ""}`}
           onClick={() => setActiveTab("Theatre")}
         >
           🏥 Theatre ({leaderboard.filter(u => u.department === "Theatre").length})
         </button>
         <button 
-          className={`${styles.tab} ${activeTab === "Pathology" ? styles.activeTab : ""}`}
+          className={`${styles.compactTab} ${activeTab === "Pathology" ? styles.activeCompactTab : ""}`}
           onClick={() => setActiveTab("Pathology")}
         >
           🔬 Pathology ({leaderboard.filter(u => u.department === "Pathology").length})
         </button>
       </div>
 
-      {/* Leaderboard List */}
-      <div className={styles.leaderboardList}>
+      {/* Compact User Cards */}
+      <div className={styles.userCardsContainer}>
         {getFilteredLeaderboard().map((user, index) => (
-          <div key={user.userId} className={styles.leaderboardRow}>
-            <div className={styles.rank}>
-              {activeTab === "all" ? `#${user.rank}` : `#${index + 1}`}
+          <div key={user.userId} className={styles.userCard}>
+            <div className={styles.cardRank}>
+              #{activeTab === "all" ? user.rank : index + 1}
             </div>
-            <div className={styles.userInfo}>
-              <div className={styles.name}>
-                {getDepartmentIcon(user.department)} {user.name}
+            <div className={styles.cardContent}>
+              <div className={styles.cardHeader}>
+                <span className={styles.cardIcon}>{getDepartmentIcon(user.department)}</span>
+                <span className={styles.cardName}>{user.name}</span>
+                <span className={styles.cardBadge}>{getBadgeIcon(user.badges)}</span>
               </div>
-              <div className={styles.stats}>
-                <span className={styles.points}>{user.points} points</span>
-                <span className={styles.streak}>🔥 {user.streak} streak</span>
-                <span className={styles.badges}>{getBadgeIcon(user.badges)} {user.badges} badges</span>
+              <div className={styles.cardStats}>
+                <div className={styles.statItem}>
+                  <span className={styles.statValue}>{user.points}</span>
+                  <span className={styles.statLabel}>points</span>
+                </div>
+                <div className={styles.statItem}>
+                  <span className={styles.statValue}>{user.streak}</span>
+                  <span className={styles.statLabel}>streak</span>
+                </div>
+                <div className={styles.statItem}>
+                  <span className={styles.statValue}>{user.badges}</span>
+                  <span className={styles.statLabel}>badges</span>
+                </div>
               </div>
             </div>
           </div>
@@ -237,7 +217,8 @@ const LeaderboardPage = ({ onBack }) => {
 
       {getFilteredLeaderboard().length === 0 && (
         <div className={styles.empty}>
-          <p>No healthcare heroes in this category yet!</p>
+          <div className={styles.emptyIcon}>🏆</div>
+          <p>No healthcare heroes yet!</p>
           <p>Start earning points by learning waste disposal guidelines.</p>
         </div>
       )}
