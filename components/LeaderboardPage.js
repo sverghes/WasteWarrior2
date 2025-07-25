@@ -166,11 +166,6 @@ const LeaderboardPage = ({ onBack }) => {
                   <span className={styles.deptStatValue}>{departmentStats.Theatre?.avgPoints || 0}</span>
                 </div>
               </div>
-              
-              <div className={styles.deptTopPerformer}>
-                <div className={styles.topPerformerLabel}>🌟 Top Performer</div>
-                <div className={styles.topPerformerInfo}>{getDepartmentRank("Theatre")}</div>
-              </div>
             </div>
           );
 
@@ -198,11 +193,6 @@ const LeaderboardPage = ({ onBack }) => {
                   <span className={styles.deptStatLabel}>Average Points</span>
                   <span className={styles.deptStatValue}>{departmentStats.Pathology?.avgPoints || 0}</span>
                 </div>
-              </div>
-              
-              <div className={styles.deptTopPerformer}>
-                <div className={styles.topPerformerLabel}>🌟 Top Performer</div>
-                <div className={styles.topPerformerInfo}>{getDepartmentRank("Pathology")}</div>
               </div>
             </div>
           );
