@@ -92,8 +92,8 @@ export const getUserWarriorId = async (department, forceMigration = true) => {
  * Formats a warrior name for display
  * @param {string} warriorId - The warrior ID (e.g., "TW1001")
  * @param {string} department - The department name
- * @returns {string} - Formatted display name
+ * @returns {string} - Formatted display name (just the ID)
  */
 export const formatWarriorName = (warriorId, department) => {
-  return `${department} Warrior ${warriorId}`;
+  return warriorId; // Return only the ID (e.g., "TW1001", "PW1001")
 };
