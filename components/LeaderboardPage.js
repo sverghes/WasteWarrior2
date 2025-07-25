@@ -134,29 +134,63 @@ const LeaderboardPage = ({ onBack }) => {
         <h1>🏆 Leaderboard</h1>
       </div>
 
-      {/* Compact Department Overview */}
-      <div className={styles.compactOverview}>
-        <div className={styles.overviewCard}>
-          <div className={styles.overviewHeader}>
-            <h3>Department Competition</h3>
-            <div className={styles.totalWarriors}>{leaderboard.length} Warriors</div>
+      {/* Department Leaf Cards */}
+      <div className={styles.departmentLeaves}>
+        <div className={styles.leafCard} data-department="theatre">
+          <div className={styles.leafHeader}>
+            <div className={styles.leafIcon}>🏥</div>
+            <div className={styles.leafTitle}>Theatre</div>
+            <div className={styles.leafRank}>
+              {departmentStats.Theatre?.totalPoints > departmentStats.Pathology?.totalPoints ? "🏆" : 
+               departmentStats.Theatre?.totalPoints === departmentStats.Pathology?.totalPoints ? "🤝" : "🥈"}
+            </div>
           </div>
-          <div className={styles.departmentComparison}>
-            <div className={styles.deptCard}>
-              <span className={styles.deptIcon}>🏥</span>
-              <div className={styles.deptInfo}>
-                <div className={styles.deptName}>Theatre</div>
-                <div className={styles.deptPoints}>{departmentStats.Theatre?.totalPoints || 0}pts</div>
-              </div>
+          <div className={styles.leafStats}>
+            <div className={styles.leafStatItem}>
+              <span className={styles.leafStatValue}>{departmentStats.Theatre?.totalPoints || 0}</span>
+              <span className={styles.leafStatLabel}>total points</span>
             </div>
-            <div className={styles.vsIndicator}>VS</div>
-            <div className={styles.deptCard}>
-              <span className={styles.deptIcon}>🔬</span>
-              <div className={styles.deptInfo}>
-                <div className={styles.deptName}>Pathology</div>
-                <div className={styles.deptPoints}>{departmentStats.Pathology?.totalPoints || 0}pts</div>
-              </div>
+            <div className={styles.leafStatItem}>
+              <span className={styles.leafStatValue}>{departmentStats.Theatre?.users || 0}</span>
+              <span className={styles.leafStatLabel}>warriors</span>
             </div>
+            <div className={styles.leafStatItem}>
+              <span className={styles.leafStatValue}>{departmentStats.Theatre?.avgPoints || 0}</span>
+              <span className={styles.leafStatLabel}>avg points</span>
+            </div>
+          </div>
+          <div className={styles.leafTopPerformer}>
+            <div className={styles.topPerformerLabel}>Top Performer</div>
+            <div className={styles.topPerformerName}>{getDepartmentRank("Theatre")}</div>
+          </div>
+        </div>
+
+        <div className={styles.leafCard} data-department="pathology">
+          <div className={styles.leafHeader}>
+            <div className={styles.leafIcon}>🔬</div>
+            <div className={styles.leafTitle}>Pathology</div>
+            <div className={styles.leafRank}>
+              {departmentStats.Pathology?.totalPoints > departmentStats.Theatre?.totalPoints ? "🏆" : 
+               departmentStats.Pathology?.totalPoints === departmentStats.Theatre?.totalPoints ? "🤝" : "🥈"}
+            </div>
+          </div>
+          <div className={styles.leafStats}>
+            <div className={styles.leafStatItem}>
+              <span className={styles.leafStatValue}>{departmentStats.Pathology?.totalPoints || 0}</span>
+              <span className={styles.leafStatLabel}>total points</span>
+            </div>
+            <div className={styles.leafStatItem}>
+              <span className={styles.leafStatValue}>{departmentStats.Pathology?.users || 0}</span>
+              <span className={styles.leafStatLabel}>warriors</span>
+            </div>
+            <div className={styles.leafStatItem}>
+              <span className={styles.leafStatValue}>{departmentStats.Pathology?.avgPoints || 0}</span>
+              <span className={styles.leafStatLabel}>avg points</span>
+            </div>
+          </div>
+          <div className={styles.leafTopPerformer}>
+            <div className={styles.topPerformerLabel}>Top Performer</div>
+            <div className={styles.topPerformerName}>{getDepartmentRank("Pathology")}</div>
           </div>
         </div>
       </div>
@@ -167,7 +201,7 @@ const LeaderboardPage = ({ onBack }) => {
           className={`${styles.compactTab} ${activeTab === "all" ? styles.activeCompactTab : ""}`}
           onClick={() => setActiveTab("all")}
         >
-          All ({leaderboard.length})
+          All Warriors ({leaderboard.length})
         </button>
         <button 
           className={`${styles.compactTab} ${activeTab === "Theatre" ? styles.activeCompactTab : ""}`}
@@ -183,32 +217,21 @@ const LeaderboardPage = ({ onBack }) => {
         </button>
       </div>
 
-      {/* Compact User Cards */}
-      <div className={styles.userCardsContainer}>
+      {/* Individual Warriors List */}
+      <div className={styles.warriorsList}>
         {getFilteredLeaderboard().map((user, index) => (
-          <div key={user.userId} className={styles.userCard}>
-            <div className={styles.cardRank}>
+          <div key={user.userId} className={styles.warriorRow}>
+            <div className={styles.warriorRank}>
               #{activeTab === "all" ? user.rank : index + 1}
             </div>
-            <div className={styles.cardContent}>
-              <div className={styles.cardHeader}>
-                <span className={styles.cardIcon}>{getDepartmentIcon(user.department)}</span>
-                <span className={styles.cardName}>{user.name}</span>
-                <span className={styles.cardBadge}>{getBadgeIcon(user.badges)}</span>
+            <div className={styles.warriorInfo}>
+              <div className={styles.warriorName}>
+                {getDepartmentIcon(user.department)} {user.name}
               </div>
-              <div className={styles.cardStats}>
-                <div className={styles.statItem}>
-                  <span className={styles.statValue}>{user.points}</span>
-                  <span className={styles.statLabel}>points</span>
-                </div>
-                <div className={styles.statItem}>
-                  <span className={styles.statValue}>{user.streak}</span>
-                  <span className={styles.statLabel}>streak</span>
-                </div>
-                <div className={styles.statItem}>
-                  <span className={styles.statValue}>{user.badges}</span>
-                  <span className={styles.statLabel}>badges</span>
-                </div>
+              <div className={styles.warriorStats}>
+                <span className={styles.warriorPoints}>{user.points} pts</span>
+                <span className={styles.warriorStreak}>🔥 {user.streak}</span>
+                <span className={styles.warriorBadges}>{getBadgeIcon(user.badges)} {user.badges}</span>
               </div>
             </div>
           </div>
