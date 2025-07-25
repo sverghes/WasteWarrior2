@@ -123,16 +123,37 @@ const Dashboard = (props) => {
             {badgeIds.muffin.length > 0 || badgeIds.coffee.length > 0 ? (
               <div className={styles.badgeIdDisplay}>
                 {(() => {
-                  // Determine the most recent badge based on current streak
+                  // Determine the most recent badge based on the new alternating system
                   const latestMuffin = badgeIds.muffin.length > 0 ? badgeIds.muffin[badgeIds.muffin.length - 1] : null;
                   const latestCoffee = badgeIds.coffee.length > 0 ? badgeIds.coffee[badgeIds.coffee.length - 1] : null;
                   
-                  // If current streak is divisible by 3, the most recent badge is coffee
-                  // Otherwise, the most recent badge is muffin
-                  if (streak > 0 && streak % 3 === 0 && latestCoffee) {
+                  // In the new system, badges are only awarded on streaks divisible by 3
+                  // Alternating: streak 3=muffin, 6=coffee, 9=muffin, 12=coffee, etc.
+                  if (streak >= 3 && streak % 3 === 0) {
+                    const milestones = Math.floor(streak / 3);
+                    const isOddMilestone = milestones % 2 === 1; // 1st, 3rd, 5th milestone = muffin
+                    
+                    if (isOddMilestone && latestMuffin) {
+                      return (
+                        <span className={styles.badgeId}>
+                          {latestMuffin}
+                        </span>
+                      );
+                    } else if (!isOddMilestone && latestCoffee) {
+                      return (
+                        <span className={styles.badgeId}>
+                          {latestCoffee}
+                        </span>
+                      );
+                    }
+                  }
+                  
+                  // Fallback: show the most recent badge available
+                  if (latestCoffee && latestMuffin) {
+                    // Compare which was awarded more recently based on total badges
                     return (
                       <span className={styles.badgeId}>
-                        {latestCoffee}
+                        {currentBadges.coffee >= currentBadges.muffin ? latestCoffee : latestMuffin}
                       </span>
                     );
                   } else if (latestMuffin) {
