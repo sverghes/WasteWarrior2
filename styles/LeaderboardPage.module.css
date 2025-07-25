@@ -12,6 +12,7 @@
   bottom: 0;
   z-index: 10000;
   width: 100vw;
+  font-family: "DM Sans", sans-serif;
 }
 
 .header {
