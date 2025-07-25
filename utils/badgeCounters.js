@@ -100,8 +100,11 @@ export const awardBadges = async (streak, existingBadgeIds = { muffin: [], coffe
  * @returns {object} - Object with muffin and coffee badge counts
  */
 const calculateBadgeCount = (streak) => {
-  const muffinBadges = streak > 0 ? Math.floor(streak / 1) : 0;
+  // Coffee badges: awarded every 3 streaks (streak 3, 6, 9, etc.)
   const coffeeBadges = streak >= 3 ? Math.floor(streak / 3) : 0;
+  
+  // Muffin badges: awarded for streaks that are NOT divisible by 3 (streak 1, 2, 4, 5, 7, 8, etc.)
+  const muffinBadges = streak > 0 ? streak - coffeeBadges : 0;
   
   return {
     muffin: muffinBadges,
