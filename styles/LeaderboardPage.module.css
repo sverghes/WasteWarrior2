@@ -2,7 +2,7 @@
   background: #FFFFFF;
   min-height: 100vh;
   height: 100vh;
-  color: #61AF2B;
+  color: #000000;
   padding: 20px;
   overflow-y: auto;
   position: fixed;
@@ -25,8 +25,8 @@
   position: absolute;
   left: 0;
   top: 0;
-  background: rgba(97, 175, 43, 0.1);
-  border: 1px solid rgba(97, 175, 43, 0.3);
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.3);
   border-radius: 50%;
   width: 40px;
   height: 40px;
@@ -38,7 +38,7 @@
 }
 
 .backButton:hover {
-  background: rgba(97, 175, 43, 0.2);
+  background: rgba(0, 0, 0, 0.2);
   transform: scale(1.1);
 }
 
@@ -80,10 +80,10 @@
 }
 
 .statCard {
-  background: rgba(97, 175, 43, 0.05);
+  background: rgba(0, 0, 0, 0.05);
   border-radius: 15px;
   padding: 20px;
-  border: 1px solid rgba(97, 175, 43, 0.2);
+  border: 1px solid rgba(0, 0, 0, 0.2);
   text-align: center;
 }
 
@@ -107,7 +107,7 @@
 .totalPoints {
   font-size: 20px;
   font-weight: bold;
-  color: #74AD42;
+  color: #000000;
 }
 
 .userCount {
@@ -128,12 +128,12 @@
 
 /* Department Winner */
 .departmentWinner {
-  background: rgba(97, 175, 43, 0.1);
+  background: rgba(0, 0, 0, 0.1);
   border-radius: 15px;
   padding: 20px;
   margin-bottom: 30px;
   text-align: center;
-  border: 2px solid rgba(97, 175, 43, 0.3);
+  border: 2px solid rgba(0, 0, 0, 0.3);
 }
 
 .departmentWinner h3 {
@@ -166,9 +166,9 @@
 }
 
 .tab {
-  background: rgba(97, 175, 43, 0.1);
-  border: 1px solid rgba(97, 175, 43, 0.3);
-  color: #61AF2B;
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  color: #000000;
   border-radius: 20px;
   padding: 10px 20px;
   cursor: pointer;
@@ -177,12 +177,12 @@
 }
 
 .tab:hover {
-  background: rgba(97, 175, 43, 0.2);
+  background: rgba(0, 0, 0, 0.2);
 }
 
 .activeTab {
-  background: #61AF2B !important;
-  border-color: #61AF2B !important;
+  background: #000000 !important;
+  border-color: #000000 !important;
   color: white !important;
   font-weight: bold;
 }
@@ -192,7 +192,7 @@
   max-height: calc(100vh - 400px);
   overflow-y: auto;
   scrollbar-width: thin;
-  scrollbar-color: rgba(97, 175, 43, 0.4) transparent;
+  scrollbar-color: rgba(0, 0, 0, 0.4) transparent;
   margin-bottom: 20px;
 }
 
@@ -205,7 +205,7 @@
 }
 
 .leaderboardList::-webkit-scrollbar-thumb {
-  background: rgba(97, 175, 43, 0.4);
+  background: rgba(0, 0, 0, 0.4);
   border-radius: 3px;
 }
 
@@ -214,9 +214,9 @@
   align-items: center;
   padding: 15px 20px;
   margin-bottom: 10px;
-  background: rgba(97, 175, 43, 0.05);
+  background: rgba(0, 0, 0, 0.05);
   border-radius: 12px;
-  border: 1px solid rgba(97, 175, 43, 0.2);
+  border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 .rank {
@@ -224,7 +224,7 @@
   margin-right: 20px;
   min-width: 40px;
   font-size: 18px;
-  color: #74AD42;
+  color: #000000;
 }
 
 .userInfo {
@@ -245,16 +245,16 @@
 }
 
 .points {
-  color: #74AD42;
+  color: #000000;
   font-weight: bold;
 }
 
 .streak {
-  color: #61AF2B;
+  color: #000000;
 }
 
 .badges {
-  color: #38a169;
+  color: #000000;
 }
 
 .empty {
