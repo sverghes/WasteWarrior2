@@ -154,7 +154,7 @@ const Dashboard = (props) => {
           <div className={styles.statLabel}>Streak</div>
         </div>
         <div className={styles.statCard}>
-          <div className={styles.statValue}>{currentBadges.total}</div>
+          <div className={styles.statValue}>{badgeIds.muffin.length + badgeIds.coffee.length}</div>
           <div className={styles.statLabel}>
             {badgeIds.muffin.length > 0 || badgeIds.coffee.length > 0 ? (
               <div className={styles.badgeIdDisplay}>
