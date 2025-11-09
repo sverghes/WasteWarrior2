@@ -23,21 +23,21 @@ const Onboarding = (props) => {
       </div>
       {step === 1 && (
         <div className={styles.image}>
-          <img src="1handright.svg" className={styles.handright} />
-          <img src="1handleft.svg" className={styles.handleft} />
+        <img src="1handright.svg" className={styles.handright} alt="Hand pointing right" />
+        <img src="1handleft.svg" className={styles.handleft} alt="Hand pointing left" />
         </div>
       )}
       {step === 2 && (
         <div className={styles.image}>
-          <img src="2robot.svg" className={styles.robot} />
-          <img src="2smoke.svg" className={styles.smoke} />
-          <img src="2question.svg" className={styles.question} />
+        <img src="2robot.svg" className={styles.robot} alt="Robot assistant" />
+        <img src="2smoke.svg" className={styles.smoke} alt="Smoke illustration" />
+        <img src="2question.svg" className={styles.question} alt="Question mark" />
         </div>
       )}
       {step === 3 && (
         <div className={styles.image}>
-          <img src="3trash.svg" className={styles.trash} />
-          <img src="3trees.svg" className={styles.trees} />
+        <img src="3trash.svg" className={styles.trash} alt="Trash can" />
+        <img src="3trees.svg" className={styles.trees} alt="Trees" />
         </div>
       )}
       <div className={styles.bottom}>
@@ -83,7 +83,7 @@ const Onboarding = (props) => {
         )}
         {step < 3 && (
           <div className={styles.next} onClick={() => handleStep()}>
-            <img src="arrow.svg" />
+          <img src="arrow.svg" alt="Next" />
           </div>
         )}
         {step === 3 && (

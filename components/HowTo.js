@@ -361,10 +361,11 @@ const HowTo = (props) => {
     <div className={styles.howto}>
       <div className={styles.title}>Medical Waste Disposal Guide</div>
       <div className={styles.input}>
-        <img src="search.svg" className={styles.search} />
+        <img src="search.svg" alt="Search" className={styles.search} />
         {searchField.length > 0 && (
           <img
             src="searchclear.svg"
+            alt="Clear search"
             onClick={() => setSearchField("")}
             className={styles.clear}
           />
@@ -412,7 +413,7 @@ const HowTo = (props) => {
             target="_blank"
             href="https://www.nhs.uk/common-health-questions/accidents-first-aid-and-treatments/"
           >
-            <div className={styles.no}>Couldn't find any medical waste items</div>
+            <div className={styles.no}>Couldn&#39;t find any medical waste items</div>
             <div className={styles.no2}>
               Click to search NHS guidelines for medical waste disposal
             </div>

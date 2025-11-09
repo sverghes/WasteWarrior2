@@ -37,7 +37,9 @@
 .all {
 	margin-top: 80px;
 	background: #EEEEEE;
-	height: calc(100% - 60px)
+	height: calc(100% - 60px);
+	overflow-y: auto;
+	padding-bottom: 80px;
 }
 .item {
 	background: #FFF;
@@ -74,3 +76,5 @@
 	font-weight: 500;
 	margin-left: 20px;
 }
+
+/* Leaderboard tester styles removed */

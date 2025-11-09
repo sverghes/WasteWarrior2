@@ -46,7 +46,7 @@ const PlasticInfo = (props) => {
 						"Empty and rinse the container",
 						"Leave labels, lids, and tops on",
 						"Squash to save space",
-						"Recycle according to your council’s guidance"
+						"Recycle according to your council&#39;s guidance"
 					],
 					no: true,
 					nolist: [
@@ -118,7 +118,7 @@ const PlasticInfo = (props) => {
 					title:"What to do",
 					subtitle:"From londonrecycles.co.uk",
 					steps: [
-						"Polystyrene can’t be recycled and should go in your rubbish bin",
+						"Polystyrene can&#39;t be recycled and should go in your rubbish bin",
 						"Avoid it if possible or try and reuse it"
 					],
 					no: false,
@@ -131,7 +131,7 @@ const PlasticInfo = (props) => {
 					title:"What to do",
 					subtitle:"From recyclenow.com",
 					steps: [
-						"Polystyrene can’t be recycled and should go in your rubbish bin",
+						"Polystyrene can&#39;t be recycled and should go in your rubbish bin",
 						"Avoid it if possible or try and reuse it"
 					],
 					no: false,
@@ -146,7 +146,7 @@ const PlasticInfo = (props) => {
 					title:"What to do",
 					subtitle:"From londonrecycles.co.uk",
 					steps: [
-						"If you have things like DVDs and sunglasses you no longer need, donate them to a charity shop if they’re in good condition",
+						"If you have things like DVDs and sunglasses you no longer need, donate them to a charity shop if they&#39;re in good condition",
 						"Check out TerraCycle for hard-to-recycle items."
 					],
 					no: false,
@@ -159,7 +159,7 @@ const PlasticInfo = (props) => {
 					title:"What to do",
 					subtitle:"From recyclenow.com",
 					steps: [
-						"If you have things like DVDs and sunglasses you no longer need, donate them to a charity shop if they’re in good condition",
+						"If you have things like DVDs and sunglasses you no longer need, donate them to a charity shop if they&#39;re in good condition",
 						"Check out TerraCycle for hard-to-recycle items."
 					],
 					no: false,
@@ -183,61 +183,57 @@ const PlasticInfo = (props) => {
 				]
 			})
 		}
-	}, []); 
+	}, [props.region, props.type]); 
 	return (
 		<div className={styles.recycleinfo}>
-			<div className={styles.header}>
-				{info.title}
-			</div>
-			<div className={styles.subheader}>
-				{info.subtitle}
-			</div>
+			<div className={styles.header}>{info.title}</div>
+			<div className={styles.subheader}>{info.subtitle}</div>
 			<div className={styles.steps}>
-				{info.steps.map((item, i) => 
+				{info.steps.map((item, i) => (
 					<div key={i} className={styles.step}>
-						<div className={styles.number}>
-							{i+1}
-						</div>
-						<div className={styles.text}>
-							{item}
-						</div>
-				</div>
-				)}
-			</div>
-			{info.no &&
-			<div className={styles.last}>
-				<div className={styles.header}>
-					What can't be recycled? 
-				</div>
-				<div className={styles.subheader}>
-				For more information search for your item in the Home page
-				</div>
-				<div className={styles.steps}>
-					{info.nolist.map((item, i) => 
-						<div key={i} className={styles.step}>
-							<div className={styles.cross}>
-							<img src="cross.svg"/>
-							</div>
-							<div className={styles.text}>
-								{item}
-							</div>
+						<div className={styles.number}>{i + 1}</div>
+						<div className={styles.text}>{item}</div>
 					</div>
-					)}
-				</div>
+				))}
 			</div>
-			}
+			{info.no && (
+				<div className={styles.last}>
+					<div className={styles.header}>What can&#39;t be recycled?</div>
+					<div className={styles.subheader}>
+						For more information search for your item in the Home page
+					</div>
+					<div className={styles.steps}>
+						{info.nolist.map((item, i) => (
+							<div key={i} className={styles.step}>
+								<div className={styles.cross}>
+									<img src="cross.svg" alt="Do not recycle" />
+								</div>
+								<div className={styles.text}>{item}</div>
+							</div>
+						))}
+					</div>
+				</div>
+			)}
 			<div className={styles.buttons}>
-				{props.type === 8 ?
-				<a href="mailto:hi@alyssax.com" target="_blank" className={styles.more}>
-					Support
-				</a>
-				:
-				<a href={props.region === 1 ? "https://londonrecycles.co.uk/recycling-101/seven-types-of-plastic/" : "https://www.recyclenow.com/recycling-locator"} target="_blank" className={styles.more}>
-					Learn more
-				</a>
-				}
+				{props.type === 8 ? (
+					<a href="mailto:hi@alyssax.com" target="_blank" className={styles.more}>
+						Support
+					</a>
+				) : (
+					<a
+						href={
+							props.region === 1
+								? "https://londonrecycles.co.uk/recycling-101/seven-types-of-plastic/"
+								: "https://www.recyclenow.com/recycling-locator"
+						}
+						target="_blank"
+						className={styles.more}
+					>
+						Learn more
+					</a>
+				)}
 				<div className={styles.scan} onClick={() => props.handleReturn(true)}>
-					<img src="scanmore.svg"/>
+					<img src="scanmore.svg" alt="Scan more" />
 					Scan more
 				</div>
 			</div>

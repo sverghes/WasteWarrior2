@@ -44,7 +44,7 @@ const DepartmentSelector = ({ onDepartmentSelect }) => {
             <div className={styles.emoji}>🏥</div>
             <div className={styles.name}>Theatre Department</div>
             <div className={styles.desc}>Surgical and operating theatre waste</div>
-            <div className={styles.warriorPreview}>You'll get WarriorID: {previewWarriorIds.Theatre}</div>
+            <div className={styles.warriorPreview}>You&#39;ll get WarriorID: {previewWarriorIds.Theatre}</div>
           </div>
           
           <div 
@@ -54,7 +54,7 @@ const DepartmentSelector = ({ onDepartmentSelect }) => {
             <div className={styles.emoji}>🔬</div>
             <div className={styles.name}>Pathology Department</div>
             <div className={styles.desc}>Laboratory and specimen waste</div>
-            <div className={styles.warriorPreview}>You'll get WarriorID: {previewWarriorIds.Pathology}</div>
+            <div className={styles.warriorPreview}>You&#39;ll get WarriorID: {previewWarriorIds.Pathology}</div>
           </div>
         </div>
         

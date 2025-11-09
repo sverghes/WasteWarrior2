@@ -20,7 +20,7 @@ const Desktop = (props) => {
         />
       )}
       <div className={styles.badge}>
-        <img src="logo-with-back.svg" />
+  <img src="logo-with-back.svg" alt="WasteWarrior logo" />
         <div className={styles.badgewrap}>
           <div className={styles.name}>WasteWarrior</div>
           <div className={styles.credit}>

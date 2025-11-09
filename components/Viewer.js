@@ -17,6 +17,16 @@ const Viewer = (props) => {
   const canvas = useRef(null);
   const [backImage, setBackImage] = useState(null);
   const [data, setData] = useState([]);
+  const {
+    pred,
+    setPred: updatePrediction,
+    tensor,
+    setTensor: updateTensor,
+    setNum,
+    num,
+    region,
+    setView
+  } = props;
 
   const handleUploadClick = () => {
     inputRef.current?.click();
@@ -30,27 +40,21 @@ const Viewer = (props) => {
 
   useEffect(() => {
     if (data.number) {
-      props.setTensor(data.tensor);
-      props.setPred(parseInt(data.number));
-      setPlastic(data.number);
-      if (plastic === 1 || plastic === 2 || plastic === 5) {
-        setRecyclable(true);
-      } else {
-        setRecyclable(false);
-      }
+      const parsedNumber = parseInt(data.number, 10);
+      updateTensor?.(data.tensor);
+      updatePrediction?.(parsedNumber);
+      setPlastic(parsedNumber);
+      setRecyclable(parsedNumber === 1 || parsedNumber === 2 || parsedNumber === 5);
       setLoading(false);
       setNext(true);
     }
-  }, [data]);
-
-  const getData = async () => {
-    classifyImage(image, setData);
-  };
+  }, [data, updatePrediction, updateTensor]);
 
   useEffect(() => {
     if (image) {
-      scan();
-      getData();
+      setScanning(true);
+      setLoading(true);
+      classifyImage(image, setData);
     }
   }, [image]);
 
@@ -87,11 +91,6 @@ const Viewer = (props) => {
     };
   };
 
-  const scan = () => {
-    setScanning(true);
-    setLoading(true);
-  };
-
   const takePhoto = async () => {
     console.log(camera.current);
     const photo = await camera.current.takePhoto();
@@ -106,17 +105,18 @@ const Viewer = (props) => {
         height={224}
         ref={canvas}
       ></canvas>
-      {!next && <img src="example.svg" className={styles.example} />}
+      {!next && <img src="example.svg" className={styles.example} alt="Example plastic" />}
       {!next && <div className={styles.title}>Scan</div>}
-      {scanning && <img className={styles.preview} src={backImage} />}
+      {scanning && <img className={styles.preview} src={backImage} alt="Captured preview" />}
       <img
         className={styles.goback}
         src="close.svg"
-        onClick={() => props.setView(false)}
+        alt="Close scanner"
+        onClick={() => setView(false)}
       />
       <div className={styles.overlay}></div>
       {loading && <div className={styles.scanline}></div>}
-      {!next && <img className={styles.scanarea} src="scanarea.svg" />}
+      {!next && <img className={styles.scanarea} src="scanarea.svg" alt="Scan area" />}
       {!scanning && (
         <Camera
           ref={camera}
@@ -127,7 +127,7 @@ const Viewer = (props) => {
       <img src={image} alt="Image preview" className={styles.image} />
       {!scanning && (
         <button className={styles.takephoto} onClick={takePhoto}>
-          <img src="cam.svg" />
+          <img src="cam.svg" alt="Capture" />
         </button>
       )}
       {!scanning && (
@@ -138,25 +138,26 @@ const Viewer = (props) => {
             camera.current.switchCamera();
           }}
         >
-          <img src="rotate.svg" />
+          <img src="rotate.svg" alt="Switch camera" />
         </button>
       )}
       {!scanning && (
         <img
           src="upload.svg"
           className={styles.upload}
+          alt="Upload"
           onClick={handleUploadClick}
         />
       )}
       <Overlay
-        pred={props.pred}
-        setPred={props.setPred}
-        tensor={props.tensor}
-        setTensor={props.setTensor}
-        setNum={props.setNum}
-        num={props.num}
+        pred={pred}
+        setPred={updatePrediction}
+        tensor={tensor}
+        setTensor={updateTensor}
+        setNum={setNum}
+        num={num}
         loading={loading}
-        region={props.region}
+        region={region}
         setPlastic={setPlastic}
         setRecyclable={setRecyclable}
         scanning={scanning}

@@ -222,6 +222,7 @@ const Dashboard = (props) => {
         <div className={styles.right}>
           <img
             src="settings.svg"
+            alt="Open settings"
             onClick={() => props.setSettings(true)}
             className={styles.settings}
           />
@@ -229,7 +230,7 @@ const Dashboard = (props) => {
       </div>
       {props.num > 0 && (
         <div className={styles.callout} onClick={() => props.setView(true)}>
-          <img src="decoration.svg" />
+          <img src="decoration.svg" alt="Celebration confetti" />
           <div className={styles.pretitle}>You classified</div>
           <div className={styles.title}>
             {props.num} medical waste item{props.num > 1 && "s"}
@@ -241,7 +242,7 @@ const Dashboard = (props) => {
       {/* Daily Challenge Section */}
       <div className={styles.challengeSection}>
         <div className={styles.challengeHeader}>
-          <img src="2question.svg" />
+          <img src="2question.svg" alt="Challenge icon" />
           <span>Daily Challenge</span>
         </div>
         <div className={styles.challengeCard}>
@@ -257,7 +258,7 @@ const Dashboard = (props) => {
       
       <HowTo onPointsUpdate={handlePointsUpdate} />
       <div className={styles.button} onClick={() => props.setView(true)}>
-        <img src="scanmore.svg" />
+        <img src="scanmore.svg" alt="Scan more" />
         Scan medical waste
       </div>
     </div>

@@ -1,9 +1,48 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../firebase/firebaseConfig";
-import { collection, query, orderBy, limit, onSnapshot, where, doc, setDoc, getDoc } from "firebase/firestore";
+import { collection, query, orderBy, limit, onSnapshot, doc, setDoc, getDoc } from "firebase/firestore";
 import styles from "../styles/LeaderboardPage.module.css";
-import { calculateBadges, getDepartmentBadges, getBadgeSummary } from "../utils/badges";
-import { getBadgeIdSummary } from "../utils/badgeCounters";
+
+// Normalize department names so stats stay consistent even if data casing differs
+const normalizeDepartment = (value) => {
+  if (!value) {
+    return null;
+  }
+
+  const normalized = value.toString().trim().toLowerCase();
+
+  if (normalized.startsWith("theatre")) {
+    return "Theatre";
+  }
+
+  if (normalized.startsWith("pathology")) {
+    return "Pathology";
+  }
+
+  return null;
+};
+
+// Ensure we always work with number types regardless of how Firestore stored the value
+const toNumber = (value) => {
+  if (typeof value === "number" && !Number.isNaN(value)) {
+    return value;
+  }
+
+  const parsed = Number(value);
+  return Number.isNaN(parsed) ? 0 : parsed;
+};
+
+// Guarantee badge IDs follow the { muffin: [], coffee: [] } structure
+const normalizeBadgeIds = (rawBadgeIds) => {
+  if (!rawBadgeIds || typeof rawBadgeIds !== "object") {
+    return { muffin: [], coffee: [] };
+  }
+
+  const muffin = Array.isArray(rawBadgeIds.muffin) ? rawBadgeIds.muffin : [];
+  const coffee = Array.isArray(rawBadgeIds.coffee) ? rawBadgeIds.coffee : [];
+
+  return { muffin, coffee };
+};
 
 const LeaderboardPage = ({ onBack }) => {
   const [leaderboard, setLeaderboard] = useState([]);
@@ -80,33 +119,60 @@ const LeaderboardPage = ({ onBack }) => {
         };
         
         let rank = 1;
-        querySnapshot.forEach((doc) => {
-          const data = doc.data();
-          console.log("👤 Processing user:", data.name || data.userId, "Department:", data.department, "Points:", data.points);
-          
-          leaderboardData.push({
-            ...data,
-            rank: rank++
-          });
-          
-          // Calculate department statistics
-          if (deptStats[data.department]) {
-            deptStats[data.department].totalPoints += data.points || 0;
-            deptStats[data.department].users += 1;
-            
-            // Use actual badge IDs instead of calculating from streak
-            const userBadgeIds = data.badgeIds || { muffin: [], coffee: [] };
-            const muffinCount = (userBadgeIds.muffin || []).length;
-            const coffeeCount = (userBadgeIds.coffee || []).length;
-            
-            deptStats[data.department].badges.muffin += muffinCount;
-            deptStats[data.department].badges.coffee += coffeeCount;
-            deptStats[data.department].badges.total += (muffinCount + coffeeCount);
-            
-            console.log(`📈 ${data.department} stats: ${deptStats[data.department].users} users, ${deptStats[data.department].totalPoints} points`);
-          } else {
-            console.warn("⚠️ Unknown department:", data.department, "for user:", data.name || data.userId);
+        querySnapshot.forEach((docSnapshot) => {
+          const rawData = docSnapshot.data();
+          const normalizedDepartment = normalizeDepartment(rawData.department);
+
+          if (!normalizedDepartment || !deptStats[normalizedDepartment]) {
+            console.warn("⚠️ Skipping user with unexpected department:", rawData.department, rawData.userId);
+            return;
           }
+
+          const points = toNumber(rawData.points);
+          const streak = toNumber(rawData.streak);
+          const badgeIds = normalizeBadgeIds(rawData.badgeIds);
+          const muffinCount = badgeIds.muffin.length;
+          const coffeeCount = badgeIds.coffee.length;
+          const totalBadges = muffinCount + coffeeCount;
+
+          const badgeCounts = {
+            muffin: muffinCount,
+            coffee: coffeeCount,
+            total: totalBadges
+          };
+
+          const leaderboardEntry = {
+            ...rawData,
+            department: normalizedDepartment,
+            points,
+            streak,
+            badges: typeof rawData.badges === "number" ? rawData.badges : totalBadges,
+            badgeIds,
+            badgeCounts,
+            rank: rank++
+          };
+
+          console.log(
+            "👤 Processing user:",
+            leaderboardEntry.name || leaderboardEntry.userId,
+            "Department:",
+            normalizedDepartment,
+            "Points:",
+            points
+          );
+
+          leaderboardData.push(leaderboardEntry);
+          
+          // Calculate department statistics with normalized data
+          deptStats[normalizedDepartment].totalPoints += points;
+          deptStats[normalizedDepartment].users += 1;
+          deptStats[normalizedDepartment].badges.muffin += muffinCount;
+          deptStats[normalizedDepartment].badges.coffee += coffeeCount;
+          deptStats[normalizedDepartment].badges.total += totalBadges;
+
+          console.log(
+            `📈 ${normalizedDepartment} stats: ${deptStats[normalizedDepartment].users} users, ${deptStats[normalizedDepartment].totalPoints} points, ${deptStats[normalizedDepartment].badges.total} badges`
+          );
         });
         
         // Calculate averages
@@ -151,14 +217,6 @@ const LeaderboardPage = ({ onBack }) => {
       case "Pathology": return "🔬";
       default: return "🏥";
     }
-  };
-
-  const getBadgeIcon = (badgeCount) => {
-    if (badgeCount >= 7) return "🏆";
-    if (badgeCount >= 5) return "🥇";
-    if (badgeCount >= 3) return "🥈";
-    if (badgeCount >= 1) return "🥉";
-    return "⭐";
   };
 
   const getFilteredLeaderboard = () => {
@@ -383,8 +441,9 @@ const LeaderboardPage = ({ onBack }) => {
                 <span className={styles.warriorStreak}>🔥 {user.streak}</span>
                 <span className={styles.warriorBadges}>
                   {(() => {
-                    const userBadges = calculateBadges(user.streak || 0);
-                    return `${userBadges.muffin} 🧁 ${userBadges.coffee} ☕`;
+                    const muffin = user.badgeCounts?.muffin ?? user.badgeIds?.muffin?.length ?? 0;
+                    const coffee = user.badgeCounts?.coffee ?? user.badgeIds?.coffee?.length ?? 0;
+                    return `${muffin} 🧁 ${coffee} ☕`;
                   })()}
                 </span>
               </div>

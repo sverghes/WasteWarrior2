@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "./../styles/Settings.module.css";
 import DatabaseAdmin from "./DatabaseAdmin";
-import LeaderboardTester from "./LeaderboardTester";
 
 const Settings = (props) => {
 	const [showAdmin, setShowAdmin] = useState(false);
@@ -29,21 +28,23 @@ const Settings = (props) => {
 	return (
 		<div className={styles.settings}>
 			<div className={styles.nav}>
-				<img src="arrow-back.svg" onClick={() => props.setSettings(false)}/>
+				<img src="arrow-back.svg" alt="Back" onClick={() => props.setSettings(false)}/>
 				<span className={styles.header}>Settings</span>
 			</div>
 			<div className={styles.all}>
-				<div className={styles.item} onClick={() => props.setReset(true)}><span>Update department</span> <img src="enter.svg"/></div>
-				<div className={styles.item} onClick={() => props.setLeaderboard(true)}><span>Leaderboard</span> <img src="enter.svg"/></div>
-				<div className={styles.item} onClick={() => props.setOn(true)}><span>View onboarding</span> <img src="enter.svg"/></div>
+				<div className={styles.item} onClick={() => props.setReset(true)}><span>Update department</span> <img src="enter.svg" alt="Go"/></div>
+				<div className={styles.item} onClick={() => props.setLeaderboard(true)}><span>Leaderboard</span> <img src="enter.svg" alt="Go"/></div>
+				<div className={styles.item} onClick={() => props.setOn(true)}><span>View onboarding</span> <img src="enter.svg" alt="Go"/></div>
 				<div className={styles.space}></div>
-				<a href="https://github.com/sverghes/WasteWarrior2" target="_blank" className={styles.item}><span>About this app</span> <img src="enter.svg"/></a>
-				<a href="https://github.com/alyssaxuu/ecosnap?tab=readme-ov-file" target="_blank" className={styles.item}><span>Acknowledgements</span> <img src="enter.svg"/></a>
+				<a href="https://github.com/sverghes/WasteWarrior2" target="_blank" className={styles.item}><span>About this app</span> <img src="enter.svg" alt="Open link"/></a>
+				<a href="https://github.com/alyssaxuu/ecosnap?tab=readme-ov-file" target="_blank" className={styles.item}><span>Acknowledgements</span> <img src="enter.svg" alt="Open link"/></a>
 				<div className={styles.space}></div>
-				<a href="https://ctmuhb.nhs.wales/hospitals/recycling/" target="_blank" className={styles.item}><span>CTMUHB Recycling</span> <img src="enter.svg"/></a>
+				<a href="https://ctmuhb.nhs.wales/hospitals/recycling/" target="_blank" className={styles.item}><span>CTMUHB Recycling</span> <img src="enter.svg" alt="Open link"/></a>
 				<div className={styles.space}></div>
-				<a href="mailto:j.kulon@southwales.ac.uk;shiny.verghese@southwales.ac.uk" target="_blank" className={styles.item}><span>Contact us</span> <img src="enter.svg"/></a>
-				
+				<a href="mailto:j.kulon@southwales.ac.uk;shiny.verghese@southwales.ac.uk" target="_blank" className={styles.item}><span>Contact us</span> <img src="enter.svg" alt="Send email"/></a>
+
+				<div className={styles.space}></div>
+
 				{/* Hidden admin trigger */}
 				<div 
 					style={{ 
@@ -63,9 +64,6 @@ const Settings = (props) => {
 			</div>
 			
 			{showAdmin && <DatabaseAdmin onClose={() => setShowAdmin(false)} />}
-			
-			{/* Temporary Leaderboard Tester - Remove after testing */}
-			<LeaderboardTester department={localStorage.getItem("department") || "Theatre"} />
 		</div>
 	)
 }

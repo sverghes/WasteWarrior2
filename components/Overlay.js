@@ -58,11 +58,11 @@ const Overlay = (props) => {
 	return (
 	<div className={wrong ? styles.mid : feedback ? styles.full : props.scanning ? styles.scanning : styles.off}>
 		{props.loading &&
-			<span><img className={styles.rotate} src="scan.svg"/> Scanning...</span>
+			<span><img className={styles.rotate} src="scan.svg" alt="Scanning spinner"/> Scanning...</span>
 		}
 		{props.ready && !wrong && !feedback &&
 			<div className={styles.feedback}>
-				<img src={"num"+props.plastic+".svg"} className={styles.plastic}/>
+				<img src={"num"+props.plastic+".svg"} className={styles.plastic} alt={`Plastic type ${props.plastic}`}/>
 				<div className={styles.feedinfo}>
 					<span className={styles.feedtitle}>Is this right?</span>
 					<span className={styles.feeddesc}>{plasticTypes[props.plastic-1]}</span>
@@ -89,15 +89,15 @@ const Overlay = (props) => {
 			</div>
 		}
 		{feedback && !wrong && !noPlastic && props.recyclable && props.ready && 
-			<span className={styles.scanrecyclable}><img src="smile.svg"/> Awesome, it's recyclable!</span>
+			<span className={styles.scanrecyclable}><img src="smile.svg" alt="Happy face"/> Awesome, it&#39;s recyclable!</span>
 		}
 		{
 		!props.recyclable && !wrong && !noPlastic && props.ready && feedback &&
-			<span className={styles.scannotrecyclable}><img src="frown.svg"/> Oh no, it’s not easily recyclable</span>
+			<span className={styles.scannotrecyclable}><img src="frown.svg" alt="Sad face"/> Oh no, it&#39;s not easily recyclable</span>
 		}
 		{
 		!wrong && noPlastic && props.ready && feedback &&
-			<span className={styles.notfound}><img src="notfound.svg"/> We can’t find the resin number</span>
+			<span className={styles.notfound}><img src="notfound.svg" alt="Not found"/> We can&#39;t find the resin number</span>
 		}
 		{props.ready && !wrong && feedback &&
 			<PlasticInfo region={props.region} type={props.plastic} handleReturn={props.handleReturn} />

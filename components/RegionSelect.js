@@ -104,7 +104,10 @@ const RegionSelect = (props) => {
 					onClick={() => handleOptionClick(1)}
 				>
 					<div className={styles.info}>
-						<img src={option === 1 ? "checked.svg" : "unchecked.svg"}/>
+						<img
+							src={option === 1 ? "checked.svg" : "unchecked.svg"}
+							alt={option === 1 ? "Department selected" : "Department not selected"}
+						/>
 						<div className={styles.name}>🏥 Theatre Department</div>
 						<div className={styles.desc}>Surgical and operating theatre waste</div>
 						{previewWarriorIds[1] && (
@@ -120,7 +123,10 @@ const RegionSelect = (props) => {
 					onClick={() => handleOptionClick(2)}
 				>
 					<div className={styles.info}>
-						<img src={option === 2 ? "checked.svg" : "unchecked.svg"}/>
+						<img
+							src={option === 2 ? "checked.svg" : "unchecked.svg"}
+							alt={option === 2 ? "Department selected" : "Department not selected"}
+						/>
 						<div className={styles.name}>🔬 Pathology Department</div>
 						<div className={styles.desc}>Laboratory and specimen waste</div>
 						{previewWarriorIds[2] && (
@@ -136,7 +142,10 @@ const RegionSelect = (props) => {
 					onClick={() => handleOptionClick(3)}
 				>
 					<div className={styles.info}>
-						<img src={option === 3 ? "checked.svg" : "unchecked.svg"}/>
+						<img
+							src={option === 3 ? "checked.svg" : "unchecked.svg"}
+							alt={option === 3 ? "Department selected" : "Department not selected"}
+						/>
 						<div className={styles.name}>🏥 General Healthcare</div>
 						<div className={styles.desc}>Universal medical waste guidelines</div>
 						{previewWarriorIds[3] && (

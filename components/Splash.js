@@ -112,7 +112,7 @@ const Splash = (props) => {
 			{isExistingUser && (!done || !done2) &&
 				<div className={styles.splash}>
 					<div className={styles.logo}>
-						<img src="logo.svg"/>
+						<img src="logo.svg" alt="WasteWarrior logo"/>
 						WasteWarrior
 					</div>
 					<div className={styles.title}>Welcome back, Warrior!</div>
@@ -122,16 +122,16 @@ const Splash = (props) => {
 			{!getStarted && !isExistingUser &&
 			<div className={styles.splash}>
 				<div className={styles.logo}>
-					<img src="logo.svg"/>
+					<img src="logo.svg" alt="WasteWarrior logo"/>
 					WasteWarrior
 				</div>
 				<div className={styles.illustration}>
-					<img className={styles.clouds} src="clouds.svg"/>
-					<img className={styles.trees} src="trees.svg"/>
-					<img className={styles.person} src="person.svg"/>
-					<img className={styles.flower} src="flower.svg"/>
-					<img className={styles.trash} src="trash.svg"/>
-					<img className={styles.ground} src="ground.svg"/>
+					<img className={styles.clouds} src="clouds.svg" alt="Clouds"/>
+					<img className={styles.trees} src="trees.svg" alt="Trees"/>
+					<img className={styles.person} src="person.svg" alt="Person recycling"/>
+					<img className={styles.flower} src="flower.svg" alt="Flower"/>
+					<img className={styles.trash} src="trash.svg" alt="Trash bin"/>
+					<img className={styles.ground} src="ground.svg" alt="Ground"/>
 				</div>
 				<div className={styles.title}>Manage medical waste better with Artificial Intelligence</div>
 				<div className={styles.subtitle}>Take a picture of medical waste and learn proper classification and disposal protocols for Theatre and Pathology departments.</div>
