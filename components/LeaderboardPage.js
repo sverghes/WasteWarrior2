@@ -29,6 +29,8 @@ const LeaderboardPage = ({ onBack }) => {
       );
 
       const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        console.log("📊 Leaderboard: Received", querySnapshot.size, "documents from Firebase");
+        
         const leaderboardData = [];
         const deptStats = {
           Theatre: { totalPoints: 0, users: 0, avgPoints: 0, badges: { muffin: 0, coffee: 0, total: 0 } },
@@ -38,6 +40,8 @@ const LeaderboardPage = ({ onBack }) => {
         let rank = 1;
         querySnapshot.forEach((doc) => {
           const data = doc.data();
+          console.log("👤 Processing user:", data.name || data.userId, "Department:", data.department, "Points:", data.points);
+          
           leaderboardData.push({
             ...data,
             rank: rank++
@@ -45,14 +49,21 @@ const LeaderboardPage = ({ onBack }) => {
           
           // Calculate department statistics
           if (deptStats[data.department]) {
-            deptStats[data.department].totalPoints += data.points;
+            deptStats[data.department].totalPoints += data.points || 0;
             deptStats[data.department].users += 1;
             
-            // Calculate badges for this user
-            const userBadges = calculateBadges(data.streak || 0);
-            deptStats[data.department].badges.muffin += userBadges.muffin;
-            deptStats[data.department].badges.coffee += userBadges.coffee;
-            deptStats[data.department].badges.total += userBadges.total;
+            // Use actual badge IDs instead of calculating from streak
+            const userBadgeIds = data.badgeIds || { muffin: [], coffee: [] };
+            const muffinCount = (userBadgeIds.muffin || []).length;
+            const coffeeCount = (userBadgeIds.coffee || []).length;
+            
+            deptStats[data.department].badges.muffin += muffinCount;
+            deptStats[data.department].badges.coffee += coffeeCount;
+            deptStats[data.department].badges.total += (muffinCount + coffeeCount);
+            
+            console.log(`📈 ${data.department} stats: ${deptStats[data.department].users} users, ${deptStats[data.department].totalPoints} points`);
+          } else {
+            console.warn("⚠️ Unknown department:", data.department, "for user:", data.name || data.userId);
           }
         });
         
@@ -62,6 +73,9 @@ const LeaderboardPage = ({ onBack }) => {
             deptStats[dept].avgPoints = Math.round(deptStats[dept].totalPoints / deptStats[dept].users);
           }
         });
+        
+        console.log("📊 Final department stats:", deptStats);
+        console.log("👥 Final leaderboard:", leaderboardData.length, "users");
         
         setLeaderboard(leaderboardData);
         setDepartmentStats(deptStats);

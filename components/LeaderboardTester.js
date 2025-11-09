@@ -14,11 +14,16 @@ const LeaderboardTester = ({ department = "Theatre" }) => {
     setLoading(true);
     setStatus("🔄 Adding mock users to Firebase...");
     
-    const success = await populateTestData();
-    if (success) {
-      setStatus("✅ Successfully added 8 mock users to leaderboard!");
-    } else {
-      setStatus("❌ Failed to add mock data. Check console for errors.");
+    try {
+      const success = await populateTestData();
+      if (success) {
+        setStatus("✅ Successfully added 8 mock users to leaderboard! Check console for details. Now go to Settings → Leaderboard to see results.");
+      } else {
+        setStatus("❌ Failed to add mock data. Check console for errors. Make sure you're online and Firebase is working.");
+      }
+    } catch (error) {
+      console.error("Error in handlePopulateData:", error);
+      setStatus("❌ Error: " + error.message + ". Check console for details.");
     }
     setLoading(false);
   };

@@ -123,28 +123,42 @@ export const populateTestData = async () => {
   try {
     if (!db) {
       console.error("Firebase not configured - cannot populate test data");
+      console.log("Make sure you're online and Firebase is properly configured");
       return false;
     }
 
     console.log("🔄 Populating Firebase with mock leaderboard data...");
     
+    // Clear existing data first to avoid duplicates
+    console.log("🧹 Clearing existing test data first...");
+    await clearTestData();
+    
+    // Add each user with detailed logging
     for (const user of mockUsers) {
+      console.log(`📝 Adding user: ${user.userId} (${user.department}) - ${user.points} points, ${user.badges} badges`);
+      
       const userRef = doc(db, "leaderboard", user.userId);
-      await setDoc(userRef, user, { merge: true });
-      console.log(`✅ Added test user: ${user.name} (${user.department}) - ${user.points} points`);
+      await setDoc(userRef, user, { merge: false }); // Use merge: false to ensure clean data
+      
+      console.log(`✅ Successfully added: ${user.name}`);
     }
     
     console.log("🎉 Successfully populated Firebase with", mockUsers.length, "test users");
-    console.log("📊 Test data includes:");
+    console.log("📊 Test data summary:");
     console.log("   • Theatre users:", mockUsers.filter(u => u.department === "Theatre").length);
     console.log("   • Pathology users:", mockUsers.filter(u => u.department === "Pathology").length);
-    console.log("   • Points range: 45-310");
-    console.log("   • Streak range: 3-21");
-    console.log("   • Badge range: 1-7");
+    console.log("   • Total points:", mockUsers.reduce((sum, u) => sum + u.points, 0));
+    console.log("   • Total badges:", mockUsers.reduce((sum, u) => sum + u.badges, 0));
+    
+    // Verify the data was actually written
+    setTimeout(async () => {
+      await verifyLeaderboardData();
+    }, 2000);
     
     return true;
   } catch (error) {
     console.error("❌ Error populating test data:", error);
+    console.error("Details:", error.message);
     return false;
   }
 };
