@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./../styles/Settings.module.css";
 import DatabaseAdmin from "./DatabaseAdmin";
+import LeaderboardTester from "./LeaderboardTester";
 
 const Settings = (props) => {
 	const [showAdmin, setShowAdmin] = useState(false);
@@ -62,6 +63,9 @@ const Settings = (props) => {
 			</div>
 			
 			{showAdmin && <DatabaseAdmin onClose={() => setShowAdmin(false)} />}
+			
+			{/* Temporary Leaderboard Tester - Remove after testing */}
+			<LeaderboardTester department={localStorage.getItem("department") || "Theatre"} />
 		</div>
 	)
 }
