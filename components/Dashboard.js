@@ -65,7 +65,7 @@ const Dashboard = (props) => {
   const currentBadges = calculateBadges(streak);
 
   // Function to sync user data to Firebase leaderboard
-  const syncToFirebase = async (points, streak, totalBadges, department) => {
+  const syncToFirebase = async (points, streak, badgeIds, department) => {
     try {
       if (!db || !department) {
         console.log("Firebase not configured or department not set - using local storage only");
@@ -76,12 +76,16 @@ const Dashboard = (props) => {
       const userRef = doc(db, "leaderboard", userId);
       const warriorName = formatWarriorName(userId, department);
       
+      // Calculate total badges from badgeIds
+      const totalBadges = (badgeIds.muffin || []).length + (badgeIds.coffee || []).length;
+      
       await setDoc(userRef, {
         userId: userId,
         name: warriorName,
         points: points,
         streak: streak,
         badges: totalBadges,
+        badgeIds: badgeIds, // Store the full badge ID structure
         department: department,
         lastUpdated: new Date().toISOString()
       }, { merge: true });
@@ -125,7 +129,7 @@ const Dashboard = (props) => {
         // Sync to Firebase when new badges are awarded
         const currentPoints = parseInt(localStorage.getItem("points") || "0");
         const currentDepartment = localStorage.getItem("department") || department;
-        syncToFirebase(currentPoints, newStreak, badgeResult.total, currentDepartment);
+        syncToFirebase(currentPoints, newStreak, badgeResult.badgeIds, currentDepartment);
       }
     } catch (error) {
       console.log("Error updating badge IDs:", error);

@@ -114,7 +114,7 @@ const HowTo = (props) => {
   ];
 
   // Function to sync user data to Firebase leaderboard
-  const syncToFirebase = async (points, streak, badges) => {
+  const syncToFirebase = async (points, streak, badgeIds) => {
     try {
       if (!db) {
         console.log("Firebase not configured - using local storage only");
@@ -128,12 +128,16 @@ const HowTo = (props) => {
       const userRef = doc(db, "leaderboard", userId);
       const warriorName = formatWarriorName(userId, department);
       
+      // Calculate total badges from badgeIds
+      const totalBadges = (badgeIds.muffin || []).length + (badgeIds.coffee || []).length;
+      
       await setDoc(userRef, {
         userId: userId,
         name: warriorName,
         points: points,
         streak: streak,
-        badges: badges,
+        badges: totalBadges,
+        badgeIds: badgeIds, // Store the full badge ID structure
         department: department,
         lastUpdated: new Date().toISOString()
       }, { merge: true });
@@ -288,13 +292,12 @@ const HowTo = (props) => {
     const newPoints = currentPoints + item.points;
     localStorage.setItem("points", newPoints.toString());
     
-    // Get current badges count for Firebase sync (using new badgeIds system)
+    // Get current badges for Firebase sync (using new badgeIds system)
     const badgeIds = JSON.parse(localStorage.getItem("badgeIds") || '{"muffin": [], "coffee": []}');
-    const totalBadges = (badgeIds.muffin?.length || 0) + (badgeIds.coffee?.length || 0);
     
     // Sync to Firebase leaderboard
     const currentStreak = parseInt(localStorage.getItem("streak") || "0");
-    syncToFirebase(newPoints, currentStreak, totalBadges);
+    syncToFirebase(newPoints, currentStreak, badgeIds);
     
     // Remove coin animation after animation completes
     setTimeout(() => {
@@ -310,8 +313,7 @@ const HowTo = (props) => {
       
       // Sync updated streak to Firebase (using new badgeIds system)
       const badgeIds = JSON.parse(localStorage.getItem("badgeIds") || '{"muffin": [], "coffee": []}');
-      const totalBadges = (badgeIds.muffin?.length || 0) + (badgeIds.coffee?.length || 0);
-      syncToFirebase(newPoints, newStreak, totalBadges);
+      syncToFirebase(newPoints, newStreak, badgeIds);
       
       // Show confetti and streak message
       createConfetti();
@@ -343,10 +345,9 @@ const HowTo = (props) => {
     if (newClickedItems.size === items.length) {
       // Sync current state to Firebase (guide completion doesn't award badges in new system)
       const badgeIds = JSON.parse(localStorage.getItem("badgeIds") || '{"muffin": [], "coffee": []}');
-      const totalBadges = (badgeIds.muffin?.length || 0) + (badgeIds.coffee?.length || 0);
       const currentPoints = parseInt(localStorage.getItem("points") || "0");
       const currentStreak = parseInt(localStorage.getItem("streak") || "0");
-      syncToFirebase(currentPoints, currentStreak, totalBadges);
+      syncToFirebase(currentPoints, currentStreak, badgeIds);
     }
   };
 
