@@ -55,6 +55,44 @@ export const generateWarriorId = async (department) => {
 };
 
 /**
+ * Syncs a new user to the Firebase leaderboard with initial data
+ * @param {string} userId - The warrior ID
+ * @param {string} department - The department name
+ */
+const syncNewUserToLeaderboard = async (userId, department) => {
+  try {
+    if (!db) {
+      console.log("Firebase not available - will sync when online");
+      return;
+    }
+
+    const userRef = doc(db, "leaderboard", userId);
+    const userDoc = await getDoc(userRef);
+    
+    // Only create if user doesn't exist in leaderboard
+    if (!userDoc.exists()) {
+      await setDoc(userRef, {
+        userId: userId,
+        name: userId, // Display the warrior ID as the name
+        points: 0,
+        streak: 0,
+        badges: 0,
+        badgeIds: {
+          muffin: [],
+          coffee: []
+        },
+        department: department,
+        lastUpdated: new Date().toISOString()
+      });
+      
+      console.log("🎯 New warrior synced to leaderboard:", userId);
+    }
+  } catch (error) {
+    console.log("Could not sync new user to leaderboard:", error.message);
+  }
+};
+
+/**
  * Gets or creates a warrior ID for the current user
  * @param {string} department - "Theatre" or "Pathology"
  * @param {boolean} forceMigration - Force migration of old IDs (optional)
@@ -79,6 +117,9 @@ export const getUserWarriorId = async (department, forceMigration = true) => {
     localStorage.setItem("warriorId", storedUserId);
     localStorage.setItem("department", department);
     localStorage.setItem("warriorIdMigrated", "true");
+    
+    // Sync new user to leaderboard immediately
+    await syncNewUserToLeaderboard(storedUserId, department);
     
     // If this was a migration, log it
     if (needsMigration) {

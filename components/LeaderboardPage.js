@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../firebase/firebaseConfig";
-import { collection, query, orderBy, limit, onSnapshot, where } from "firebase/firestore";
+import { collection, query, orderBy, limit, onSnapshot, where, doc, setDoc, getDoc } from "firebase/firestore";
 import styles from "../styles/LeaderboardPage.module.css";
 import { calculateBadges, getDepartmentBadges, getBadgeSummary } from "../utils/badges";
 import { getBadgeIdSummary } from "../utils/badgeCounters";
@@ -11,7 +11,49 @@ const LeaderboardPage = ({ onBack }) => {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("all");
 
+  // Ensure current user is synced to leaderboard
+  const ensureCurrentUserSynced = async () => {
+    try {
+      const storedUserId = localStorage.getItem("warriorId");
+      const storedDepartment = localStorage.getItem("department");
+      
+      if (!storedUserId || !storedDepartment || !db) {
+        return;
+      }
+
+      const userRef = doc(db, "leaderboard", storedUserId);
+      const userDoc = await getDoc(userRef);
+      
+      // If user doesn't exist in leaderboard, create them
+      if (!userDoc.exists()) {
+        // Get current local data
+        const currentPoints = parseInt(localStorage.getItem("points")) || 0;
+        const currentStreak = parseInt(localStorage.getItem("streak")) || 0;
+        const badgeIds = JSON.parse(localStorage.getItem("badgeIds") || '{"muffin":[],"coffee":[]}');
+        const totalBadges = (badgeIds.muffin || []).length + (badgeIds.coffee || []).length;
+        
+        await setDoc(userRef, {
+          userId: storedUserId,
+          name: storedUserId,
+          points: currentPoints,
+          streak: currentStreak,
+          badges: totalBadges,
+          badgeIds: badgeIds,
+          department: storedDepartment,
+          lastUpdated: new Date().toISOString()
+        });
+        
+        console.log("🎯 Current user synced to leaderboard:", storedUserId);
+      }
+    } catch (error) {
+      console.log("Could not sync current user:", error.message);
+    }
+  };
+
   useEffect(() => {
+    // Ensure current user is synced to leaderboard
+    ensureCurrentUserSynced();
+    
     // Try to connect to Firebase, but handle offline gracefully
     try {
       if (!db) {
