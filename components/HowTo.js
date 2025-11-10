@@ -8,6 +8,7 @@ const HowTo = (props) => {
   const [searchField, setSearchField] = useState("");
   const [coinAnimations, setCoinAnimations] = useState([]);
   const [clickedItems, setClickedItems] = useState(new Set());
+  const [completedItems, setCompletedItems] = useState(new Set());
   const [dailyClickCount, setDailyClickCount] = useState(0);
   const [isOnCooldown, setIsOnCooldown] = useState(false);
   const [cooldownEndTime, setCooldownEndTime] = useState(null);
@@ -153,6 +154,7 @@ const HowTo = (props) => {
     const savedClickCount = parseInt(localStorage.getItem("dailyClickCount") || "0");
     const savedCooldownEnd = localStorage.getItem("cooldownEndTime");
     const savedClickedItems = localStorage.getItem("dailyClickedItems");
+    const savedCompletedItems = localStorage.getItem("completedGuideItems");
     
     setDailyClickCount(savedClickCount);
     
@@ -162,6 +164,15 @@ const HowTo = (props) => {
         setClickedItems(new Set(parsedItems));
       } catch (e) {
         console.error("Error parsing clicked items:", e);
+      }
+    }
+
+    if (savedCompletedItems) {
+      try {
+        const parsedCompleted = JSON.parse(savedCompletedItems);
+        setCompletedItems(new Set(parsedCompleted));
+      } catch (e) {
+        console.error("Error parsing completed items:", e);
       }
     }
     
@@ -254,6 +265,11 @@ const HowTo = (props) => {
       return;
     }
     
+    // Don't allow interaction if already completed before
+    if (completedItems.has(index)) {
+      return;
+    }
+
     // Don't add points if already clicked in this session
     if (clickedItems.has(index)) {
       return;
@@ -262,6 +278,11 @@ const HowTo = (props) => {
     // Add to clicked items
     const newClickedItems = new Set([...clickedItems, index]);
     setClickedItems(newClickedItems);
+  // Persist lifetime completion so guides stay disabled across sessions
+  const newCompletedItems = new Set([...completedItems, index]);
+  setCompletedItems(newCompletedItems);
+  localStorage.setItem("completedGuideItems", JSON.stringify([...newCompletedItems]));
+
     
     // Increment daily click count
     const newDailyCount = dailyClickCount + 1;
@@ -380,10 +401,10 @@ const HowTo = (props) => {
         {filteredItems.length > 0 ? (
           filteredItems.map((item, i) => (
             <div
-              className={`${styles.result} ${clickedItems.has(i) ? styles.clicked : ''}`}
+              className={`${styles.result} ${(clickedItems.has(i) || completedItems.has(i)) ? styles.clicked : ''}`}
               key={i}
               onClick={(e) => handleItemClick(e, item, i)}
-              style={{ position: 'relative' }}
+              style={{ position: 'relative', pointerEvents: completedItems.has(i) ? 'none' : 'auto' }}
             >
               <div
                 className={styles.image}
@@ -393,8 +414,8 @@ const HowTo = (props) => {
                 <div className={styles.name}>{item.name}</div>
                 <div className={styles.desc}>{item.description}</div>
                 {item.points && (
-                  <div className={`${styles.points} ${clickedItems.has(i) ? styles.pointsEarned : ''}`}>
-                    {clickedItems.has(i) ? '✓ Earned' : `+${item.points} points`}
+                  <div className={`${styles.points} ${(clickedItems.has(i) || completedItems.has(i)) ? styles.pointsEarned : ''}`}>
+                    {(clickedItems.has(i) || completedItems.has(i)) ? '✓ Earned' : `+${item.points} points`}
                   </div>
                 )}
               </div>
